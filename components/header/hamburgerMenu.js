@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoReturnDownBackSharp } from "react-icons/io5";
 import Input from "../general/Input";
+import HamburgerMenuContent from "../HamburgerMenuContent";
 
 function HamburgerMenu() {
     const [openMenu, setOpenMenu] = useState(false);
@@ -29,19 +30,15 @@ function HamburgerMenu() {
                 />
             </div>
 
-            {/* {openMenu && (
-                <div
-                    className="fixed inset-0 bg-black bg-opacity-50 z-40 dark:bg-opacity-70"
-                    onClick={() => setOpenMenu(false)} 
-                ></div>
-            )} */}
-
             <div
-                className={`fixed top-0 left-0 h-full w-full bg-white dark:bg-black z-50 transform ${openMenu ? "scale-100" : "scale-0"
-                    } ${openMenu ? "ease-out transition duration-500" : ""} shadow-lg flex items-center justify-center`}
+                className={`fixed left-0 mt-9 mx-64 h-3/5 w-auto bg-white dark:bg-black z-50 transform ${openMenu ? "scale-100" : "scale-0"
+                    } ${openMenu ? "ease-out transition duration-500" : ""} shadow-lg flex`}
             >
+               
+
+                {/* Content - Ortada */}
                 <div
-                    className="flex flex-col p-4 space-y-4 w-full max-w-md text-black dark:text-white"
+                    className="flex flex-col p-4 space-y-4 w-full text-black dark:text-white"
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div
@@ -56,30 +53,7 @@ function HamburgerMenu() {
                     </div>
 
                     <div className="flex flex-col space-y-4 text-center">
-                        <p
-                            className="text-lg font-medium hover:text-blue-500"
-                            onClick={() => setOpenMenu(false)}
-                        >
-                            Home
-                        </p>
-                        <p
-                            className="text-lg font-medium hover:text-blue-500"
-                            onClick={() => setOpenMenu(false)}
-                        >
-                            About
-                        </p>
-                        <p
-                            className="text-lg font-medium hover:text-blue-500"
-                            onClick={() => setOpenMenu(false)}
-                        >
-                            Services
-                        </p>
-                        <p
-                            className="text-lg font-medium hover:text-blue-500"
-                            onClick={() => setOpenMenu(false)}
-                        >
-                            Contact
-                        </p>
+                        <HamburgerMenuContent />
                     </div>
                 </div>
             </div>
