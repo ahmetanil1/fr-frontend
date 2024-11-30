@@ -1,21 +1,53 @@
-import React from 'react';
+"use client"
+
+import React, { useState } from 'react';
 import LoginRegister from '@/components/login-register';
 import WithRegister from '@/components/withRegister';
 import Link from 'next/link';
+import config from "@/config.json";
 
 function LoginContainer() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleSubmitLogin = async (e) => {
+        e.preventDefault();
+
+        try {
+            const response = await fetch(config.backend_url + "/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, password }),
+                credentials: 'include'
+            });
+
+            const data = await response.json();
+            console.log(data)
+        } catch (error) {
+            console.error("Hata:", error);
+        }
+    };
+
+
+
     return (
         <div>
             <LoginRegister />
             <div>
-                <form className="max-w-sm mx-auto">
+                <form onSubmit={(e) => handleSubmitLogin(e)} className="max-w-sm mx-auto">
                     <div className="mb-5">
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                        <input type="email" id="email" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light" required />
+                        <input type="email" value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            id="email" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light" required />
                     </div>
                     <div className="mb-5">
                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                        <input type="password" id="password" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light" required />
+                        <input type="password" value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            id="password" className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light" required />
                     </div>
 
                     <div className='mt-4'>
