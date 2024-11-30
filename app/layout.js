@@ -34,17 +34,16 @@ export default function RootLayout({ children }) {
 
     return (
         <html lang="en" className={inter.className}>
-            <body >
-                {/* <div className={`flex flex-col min-h-screen ${darkMode ? 'dark' : ''}`}>
-                 */}
-                <div className="flex flex-col min-h-screen">
-                    {/* <Header toggleDarkMode={toggleDarkMode} darkMode={darkMode} /> */}
-                    <Header />
-                    <hr />
-                    <main className="flex-grow">{children}</main>
-                    <Footer />
+            <body className='h-screen w-screen ' >
+                <div className='flex flex-col min-h-screen'>
+                    <div className="flex flex-col flex-grow mx-64">
+                        <Header />
+                        <hr />
+                        <main className="flex-grow">{children}</main>
+                    </div>
+                    <Footer className="w-full" />
                 </div>
             </body>
-        </html >
+        </html>
     );
 }
