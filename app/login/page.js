@@ -34,7 +34,7 @@ function LoginContainer() {
 
     return (
         <div>
-            <LoginRegister />
+            <LoginRegister className="m-10" />
             <div>
                 <form onSubmit={(e) => handleSubmitLogin(e)} className="max-w-sm mx-auto">
                     <div className="mb-5">
