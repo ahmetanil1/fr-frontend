@@ -1,8 +1,9 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import LoginRegister from '@/components/login-register';
 import WithRegister from '@/components/withRegister';
 import config from "@/config.json";
+import Toast from '@/components/error-handler';  // Import the Toast component
 
 function RegisterContainer() {
     const [username, setUsername] = useState("");
@@ -11,116 +12,156 @@ function RegisterContainer() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");  // New state for success messages
+    const [isToastVisible, setIsToastVisible] = useState(false);
+
+    const validateForm = () => {
+        // Clear previous errors
+        setErrorMessage("");
+        setSuccessMessage("");  // Clear success message
+
+        if (password !== confirmPassword) {
+            setErrorMessage("Passwords do not match.");
+            return false;
+        }
+
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z]).{6,18}$/;
+        if (!passwordPattern.test(password)) {
+            setErrorMessage("Password must be 6-18 characters long and contain at least one uppercase and one lowercase letter.");
+            return false;
+        }
+
+        const usernamePattern = /^[a-zA-Z0-9_]+$/;
+        if (!usernamePattern.test(username)) {
+            setErrorMessage("Username can only contain letters, numbers, and underscores.");
+            return false;
+        }
+
+        if (!email.includes("@")) {
+            setErrorMessage("Please enter a valid email.");
+            return false;
+        }
+
+        return true;
+    };
 
     const handleSubmitRegister = async (e) => {
         e.preventDefault();
-        if (password != confirmPassword) {
 
-            console.log("didn't match passwords");
+        if (!validateForm()) {
+            setIsToastVisible(true);  // Show the toast when validation fails
+            return;
         }
-        if (password == confirmPassword) {
-            try {
-                const response = await fetch(config.backend_url + "/auth/register", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ username, name, surname, email, password }),
-                    credentials: "include"
-                });
 
-                const data = await response.json();
-                console.log(data)
-            } catch (error) {
-                console.error("Hata:", error);
+        try {
+            const response = await fetch(config.backend_url + "/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, name, surname, email, password }),
+                credentials: "include"
+            });
+
+            const data = await response.json();
+            console.log(data);
+
+            if (response.ok) {
+                setSuccessMessage("Registration successful!");  // Set success message
+                setIsToastVisible(true);  // Show success toast
+                window.location.href = "/login";  // Redirect to login page
+            } else {
+                setErrorMessage(data.message || "An error occurred during registration.");
+                setIsToastVisible(true);  // Show toast if registration fails
             }
+        } catch (error) {
+            console.error("Error:", error);
+            setErrorMessage("An error occurred while submitting the form.");
+            setIsToastVisible(true);  // Show toast on error
         }
     };
 
-
     return (
-        <div>
+        <div className='flex flex-col '>
             <LoginRegister />
             <div>
-                <form onClick={(e) => handleSubmitRegister(e)} className="max-w-sm mx-auto">
+                <form onSubmit={handleSubmitRegister} className="max-w-sm mx-auto">
                     <div className="mb-5">
-                        <label htmlFor="text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                        <input  
+                        <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                        <input
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             type="text"
                             id="name"
                             className="mb-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light"
-                            required
                         />
 
-                        <label htmlFor="text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Surname</label>
-                        <input 
+                        <label htmlFor="surname" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Surname</label>
+                        <input
                             value={surname}
                             onChange={(e) => setSurname(e.target.value)}
                             type="text"
                             id="surname"
                             className="mb-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light"
-                            required
                         />
-                        <label htmlFor="text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                        <input 
+
+                        <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
+                        <input
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             type="text"
-                            id="name"
-                            pattern="^[mb-1 a-zA-Z0-9_]+$"  // Yalnızca İngilizce harfler, rakamlar ve alt çizgi (_)
-                            title="Username yalnızca İngilizce harfler, rakamlar ve alt çizgi (_) içerebilir. Türkçe karakterler yasaktır."
+                            id="username"
+                            pattern="^[a-zA-Z0-9_]+$"
+                            title="Username can only contain letters, numbers, and underscores."
                             className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light"
-                            required
                         />
+
                         <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                        <input 
+                        <input
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            type="email"
+                            type="text"
                             id="email"
                             className="mb-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light"
-                            required
                         />
-                        <div >
-                            <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                            <input 
-                                minLength={6}  // Minimum karakter uzunluğu
-                                maxLength={18} // Maksimum karakter uzunluğu
-                                pattern="^(?=.*[a-z])(?=.*[A-Z]).{6,18}$"  // En az bir küçük ve bir büyük harf gereksinimi
-                                title="Şifrmb-1 e en az bir küçük harf ve bir büyük harf içermeli ve 6-18 karakter uzunluğunda olmalıdır."
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                type="password"
-                                id="password"
-                                className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light"
-                                required
-                            />
-                        </div>
-                        <div className="mb-5">
-                            <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-                            <input 
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                type="password"
-                                id="confirm-password"
-                                className="mb-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light"
-                                required
-                            />
-                        </div>
+
+                        <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                        <input
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            type="password"
+                            id="password"
+                            pattern="^(?=.*[a-z])(?=.*[A-Z]).{6,18}$"
+                            title="Password must be 6-18 characters long and contain at least one uppercase and one lowercase letter."
+                            minLength={6}
+                            maxLength={18}
+                            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light"
+                        />
+
+                        <label htmlFor="confirm-password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+                        <input
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            type="password"
+                            id="confirm-password"
+                            className="mb-1 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-500 dark:focus:border-gray-500 dark:shadow-sm-light"
+                        />
                     </div>
 
-                    <WithRegister />
 
                     <button
                         type="submit"
-                        className="w-full text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
+                        className="w-full mb-2 text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
                     >
                         Register
                     </button>
                 </form>
             </div>
+
+            {isToastVisible && (
+                <Toast message={errorMessage || successMessage} onClose={() => setIsToastVisible(false)} />
+            )}
         </div>
     );
 }
