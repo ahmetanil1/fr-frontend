@@ -7,7 +7,7 @@ function DarkMode({ toggleDarkMode, darkMode }) {
             {darkMode ? (
                 <MdOutlineNightsStay size={20} className="text-yellow-500" />
             ) : (
-                <MdOutlineWbSunny size={20} className="text-black" />
+                <MdOutlineWbSunny size={20} className="text-black font-bold" />
             )}
         </button>
     );
