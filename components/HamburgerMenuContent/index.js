@@ -1,62 +1,37 @@
-import Link from "next/link";
+"use client";
+
+import Image from "next/image";
 import React from "react";
 
-function HamburgerMenuContent({ onCategoryClick }) {
-    const recipeCategories = [
-        "Appetizers",
-        "Main Courses",
-        "Desserts",
-        "Salads",
-        "Soups",
-        "Beverages",
-        "Breakfast",
-        "Snacks",
-        "Vegetarian",
-        "Vegan",
-        "Gluten-Free",
-        "Seafood",
-        "Poultry",
-        "Meat",
-        "Pasta",
-        "Rice Dishes",
-        "Baking",
-        "Grilling",
-        "Slow Cooker",
-        "Instant Pot",
-        "Healthy Recipes",
-        "Quick & Easy",
-        "International Cuisine",
-        "Seasonal Recipes",
-    ];
-
-    const chunkArray = (array, chunkSize) => {
-        const chunks = [];
-        for (let i = 0; i < array.length; i += chunkSize) {
-            chunks.push(array.slice(i, i + chunkSize));
-        }
-        return chunks;
-    };
-
-    const chunkedCategories = chunkArray(recipeCategories, 13);
-
+const HamburgerMenuContent = ({ categories, onCategoryClick }) => {
     return (
-        <div>
-            <h1 className="text-xl font-bold">Recipe Categories</h1>
-            <div className="container mx-auto p-4 flex gap-2">
-                {chunkedCategories.map((chunk, colIndex) => (
-                    <ul key={colIndex} className="list-disc pl-5 list-none ">
-                        {chunk.map((category, index) => (
-                            <li key={index} onClick={onCategoryClick ? onCategoryClick : undefined}>
-                                <Link href="/login" className="flex text-xs  text-gray-500 hover:text-black hover:scale-105 mb-2">
-                                    {category}
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
+        <div className="dark:text-black">
+            <div className="flex flex-wrap justify-center gap-4 mb-10 z-50">
+                {categories.map((category, index) => (
+                    <div
+                        key={category.id}
+                        className="relative cursor-pointer hover:scale-105 transition-transform"
+                        onClick={() => onCategoryClick(category.id)}
+                        style={{ width: 126.47, height: 115 }}
+                    >
+                        {/* Resim yalnızca md ve üstü ekranlarda görünsün */}
+                        <Image
+                            unoptimized
+                            src={category.image_url}
+                            alt={category.name}
+                            layout="fill"
+                            className="object-cover rounded-lg"
+                        />
+
+                        {/* Kategori adı her ekran boyutunda görünsün */}
+                        <div className="absolute top-1/2 left-0 w-full text-white text-center py-1 rounded-b-lg">
+                            {category.name}
+                        </div>
+                    </div>
                 ))}
             </div>
         </div>
     );
-}
+};
 
 export default HamburgerMenuContent;
