@@ -15,7 +15,7 @@ function LoginRegister() {
 
 
     return (
-        <div className="auth-nav m-10 flex justify-center items-center space-x-4">
+        <div className="auth-nav m-3 flex justify-center items-center space-x-4">
             <Link
                 href="/login"
                 onClick={() => setSelected("login")}

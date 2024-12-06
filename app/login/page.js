@@ -60,7 +60,7 @@ function LoginContainer() {
                         Login
                     </button>
                     <Link href="/forgot-password"
-                        className="text-gray-600 hover:underline mt-4 flex justify-end">
+                        className="text-gray-600 hover:underline dark:text-white mt-4 flex justify-end">
                         Şifremi Unuttum
                     </Link>
                 </form>
