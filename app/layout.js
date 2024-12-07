@@ -37,14 +37,14 @@ export default function RootLayout({ children }) {
 
     return (
         <html lang="en" className={`${inter.className}`}>
-            <body className="h-screen w-screen bg-gray-100  dark:bg-gradient-to-t from-black text-gray-900 dark:text-gray-100">
+            <body className="h-full w-full bg-gray-100 bg-repeat-none dark:bg-gradient-to-t from-black text-gray-900 dark:text-gray-100">
                 <div className="flex flex-col min-h-screen">
                     <div className="flex flex-col flex-grow mx-4 sm:mx-8 md:mx-16 lg:mx-32 xl:mx-64">
                         <Header toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
                         <hr className="border-gray-300 dark:border-gray-100" />
-                        <main className="flex-grow ">{children}</main>
+                        <main className="flex-grow">{children}</main>
                     </div>
-                    <Footer className="w-full fixed" />
+                    <Footer className="w-full" />
                 </div>
             </body>
         </html>

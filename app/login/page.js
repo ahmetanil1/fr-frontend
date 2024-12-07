@@ -5,10 +5,24 @@ import LoginRegister from '@/components/login-register';
 import WithRegister from '@/components/withRegister';
 import Link from 'next/link';
 import config from "@/config.json";
+import { useRouter } from 'next/navigation';
+import Toast from '@/components/error-handler';
 
 function LoginContainer() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { toast, setToast } = useState({ message: "", type: "", onClose: false });
+    const router = useRouter();
+
+
+    const showToast = (message, type) => {
+        setToast({ message, type, onClose: true });
+    };
+
+    const handleToastClose = () => {
+        setToast({ ...toast, onClose: false });
+    };
+    // console.log("Toast STATE:", toast);
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
@@ -23,8 +37,16 @@ function LoginContainer() {
                 credentials: 'include'
             });
 
-            const data = await response.json();
-            console.log(data)
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                showToast("Giriş başarılı! Yönlendiriliyorsunuz...", "success");
+                router.push("/");
+            }
+            else {
+                const errorData = await response.json();
+                showToast(errorData.message || "Giriş başarısız.", "error");
+            }
         } catch (error) {
             console.error("Hata:", error);
         }
@@ -65,7 +87,10 @@ function LoginContainer() {
                     </Link>
                 </form>
             </div>
-        </div>
+            {toast?.onClose && (
+                <Toast message={toast.message} type={toast.type} onClose={handleToastClose} />
+            )}
+        </div >
     )
 }
 

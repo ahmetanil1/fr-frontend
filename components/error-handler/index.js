@@ -6,15 +6,15 @@ const Toast = ({ message, type, onClose }) => {
         // Automatically close the toast after 5 seconds
         const timer = setTimeout(() => {
             onClose();
-        }, 5000);
+        }, 3000);
         return () => clearTimeout(timer);
     }, [message, onClose]);
 
-    let toastClass = "bg-gray-500"; // Default gray background for info
+    let toastClass = "bg-gray-500"; 
     if (type === 'success') {
-        toastClass = "bg-green-500"; // Green for success
+        toastClass = "bg-green-500"; 
     } else if (type === 'error') {
-        toastClass = "bg-red-500"; // Red for error
+        toastClass = "bg-red-500"; 
     }
 
     return (
