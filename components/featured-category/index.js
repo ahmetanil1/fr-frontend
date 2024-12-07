@@ -8,15 +8,15 @@ function FeaturedCategory({ category = {}, isCompact = false }) {
             <div className='rounded-md w-5'>
                 <Image
                     unoptimized
-                    src="https://media.themoviedb.org/t/p/w220_and_h330_face/ugQkpGajKFQ8eyOEhGheR0HfWQ.jpg"
+                    src={image_url || "https://via.placeholder.com/300"}
                     alt={`${title}`}
                     width={isCompact ? 100 : 200}
                     height={isCompact ? 150 : 300}
+                    layout="responsive"
                 />
             </div>
             <div className='flex z-50 justify-center items-center font-bold'>
-                <p>{title}</p>
-                <p>Kategori Sayfası</p>
+                <p className='text-xl font-bold mt-2'>{title}</p>
             </div>
         </div>
     )

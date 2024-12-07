@@ -1,13 +1,32 @@
 "use client";
 
+import { getCategories } from "@/services/categories";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-const HamburgerMenuContent = ({ categories, onCategoryClick }) => {
+const HamburgerMenuContent = () => {
+    const [categories, setCategories] = useState([]); // useState doğru şekilde tanımlandı
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const data = await getCategories();
+                setCategories(data); // API'den gelen veriler state'e kaydediliyor
+            } catch (error) {
+                console.error("Kategori verileri alınamadı:", error);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    const onCategoryClick = (categoryId) => {
+        console.log("Seçilen kategori ID:", categoryId); // Kategori ID'sini yazdır
+    };
+
     return (
         <div className="dark:text-black">
             <div className="flex flex-wrap justify-center gap-4 mb-10 z-50">
-                {categories.map((category, index) => (
+                {categories.map((category) => (
                     <div
                         key={category.id}
                         className="relative cursor-pointer hover:scale-105 transition-transform"

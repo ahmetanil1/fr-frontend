@@ -1,20 +1,23 @@
 import CategoryContainer from '@/containers/category'
 import { notFound } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { getCatogeries } from "@/services/category"
 
-async function CategoryPage({ params, searchParams }) {
-    // const categoryDetail = await fetchSingleCategory(params.id);
+async function CategoryPage() {
+    const [categories, setCategories] = useState([]);
 
-    // if (CategoryPageDetail.success === false) {
-    //     notFound();
-    // }
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const data = await getCategories(); // API'den verileri bekle
+            setCategories(data);
+        };
 
-    // if (!searchParams.error === "true") {
-    //     throw new Error("Error Happened while fetching single category");
-    // }
+        fetchCategories();
+    }, [])
 
-    // return <CategoryContainer category={categoryDetail} />
-    return <CategoryContainer />
+
+
+    return <CategoryContainer categories={categories} />
 
 }
 
