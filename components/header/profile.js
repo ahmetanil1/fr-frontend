@@ -4,23 +4,35 @@ import React, { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
 import useUserStore from "@/store/useUserStore";
-import { getUsers } from "@/services/users";
+import { fetchSingleUser, } from "@/services/users";
 
 function Profile() {
     const [openMenu, setOpenMenu] = useState(false);
     const { user, setUser } = useUserStore();
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const data = await getUsers();
-                setUser(data[0]); // API'den gelen ilk kullanıcıyı state'e kaydet
-            } catch (error) {
-                console.error("Kullanıcı verileri alınamadı:", error);
-            }
-        };
-        fetchUser();
-    }, [setUser]);
+
+    // useEffect(() => {
+    //     const storedUser = JSON.parse(localStorage.getItem("user"));
+    //     if (storedUser) {
+    //         setUser(storedUser);
+    //     }
+    //     const fetchUser = async () => {
+    //         if (user && user.id) {
+    //             try {
+    //                 const data = await fetchSingleUser(user.id);
+    //                 if (data) {
+    //                     setUser(data);
+    //                     localStorage.setItem("user", JSON.stringify(data));
+
+    //                 }
+    //             } catch (error) {
+    //                 console.log("error:", error);
+    //             }
+    //         }
+    //     };
+    //     fetchUser();
+    // }, [user, setUser]);
+
 
     const handleLogout = () => {
         // Logout işlemleri burada yapılabilir

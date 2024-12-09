@@ -4,6 +4,7 @@ import Link from "next/link";
 
 function LoginRegister() {
     const [selected, setSelected] = useState("login");
+
     useEffect(() => {
         const path = window.location.pathname;
         if (path === "/login") {
@@ -12,7 +13,6 @@ function LoginRegister() {
             setSelected("register");
         }
     }, []);
-
 
     return (
         <div className="auth-nav m-3 flex justify-center items-center space-x-4">
@@ -26,7 +26,7 @@ function LoginRegister() {
             </Link>
             <Link
                 href="/register"
-                onClick={() => { setSelected("register"); console.log(setSelected) }}
+                onClick={() => setSelected("register")}
                 className={`px-4 py-2 duration-300 rounded-md border border-gray-500 ${selected === "register" ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-700"
                     }`}
             >
