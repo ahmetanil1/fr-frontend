@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import LoginRegister from '@/components/login-register';
 import WithRegister from '@/components/withRegister';
 import config from "@/config.json";
-import Toast from '@/components/error-handler';  // Import the Toast component
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 function RegisterContainer() {
     const [username, setUsername] = useState("");
@@ -12,34 +13,32 @@ function RegisterContainer() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");  // New state for success messages
-    const [isToastVisible, setIsToastVisible] = useState(false);
+
+    const router = useRouter();
+
 
     const validateForm = () => {
-        // Clear previous errors
-        setErrorMessage("");
-        setSuccessMessage("");  // Clear success message
+
 
         if (password !== confirmPassword) {
-            setErrorMessage("Passwords do not match.");
+            toast.error("Passwords do not match.");
             return false;
         }
 
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z]).{6,18}$/;
         if (!passwordPattern.test(password)) {
-            setErrorMessage("Password must be 6-18 characters long and contain at least one uppercase and one lowercase letter.");
+            toast.error("Password must be 6-18 characters long and contain at least one uppercase and one lowercase letter.");
             return false;
         }
 
         const usernamePattern = /^[a-zA-Z0-9_]+$/;
         if (!usernamePattern.test(username)) {
-            setErrorMessage("Username can only contain letters, numbers, and underscores.");
+            toast.error("Username can only contain letters, numbers, and underscores.");
             return false;
         }
 
         if (!email.includes("@")) {
-            setErrorMessage("Please enter a valid email.");
+            toast.error("Please enter a valid email.");
             return false;
         }
 
@@ -50,7 +49,7 @@ function RegisterContainer() {
         e.preventDefault();
 
         if (!validateForm()) {
-            setIsToastVisible(true);  // Show the toast when validation fails
+            toast.error("Please check the form and try again.");
             return;
         }
 
@@ -68,9 +67,10 @@ function RegisterContainer() {
             console.log(data);
 
             if (response.ok) {
-                setSuccessMessage("Registration successful!");  // Set success message
-                setIsToastVisible(true);  // Show success toast
-                window.location.href = "/login";  // Redirect to login page
+                toast.success("Registration successful. Redirecting to login page.");
+                setTimeout(() => {
+                    router.push("/login");  // Redirect to login page
+                }, 500);
             } else {
                 setErrorMessage(data.message || "An error occurred during registration.");
                 setIsToastVisible(true);  // Show toast if registration fails
@@ -158,10 +158,6 @@ function RegisterContainer() {
                     </button>
                 </form>
             </div>
-
-            {isToastVisible && (
-                <Toast message={errorMessage || successMessage} onClose={() => setIsToastVisible(false)} />
-            )}
         </div>
     );
 }
