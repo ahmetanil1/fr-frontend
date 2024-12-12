@@ -47,19 +47,25 @@ function ProfilePage() {
                 <div className='flex justify-center gap-6 md:gap-16 ml-4 pb-2 font-small'>
                     <p
                         onClick={() => handleTabClick('Tarifler')}
-                        className={`cursor-pointer ${activeTab === 'Tarifler' ? ' font-bold' : 'text-gray-700'}`}
+                        className={` cursor-pointer ${activeTab === 'Tarifler' ? ' font-bold' : 'text-gray-700 '}`}
                     >
                         Tarifler
                     </p>
                     <p
+                        onClick={() => handleTabClick('Yazılar')}
+                        className={` cursor-pointer ${activeTab === 'Yazılar' ? ' font-bold' : 'text-gray-700 '}`}
+                    >
+                        Yazılar
+                    </p>
+                    <p
                         onClick={() => handleTabClick('Favoriler')}
-                        className={`cursor-pointer ${activeTab === 'Favoriler' ? ' font-bold' : 'text-gray-700'}`}
+                        className={` cursor-pointer ${activeTab === 'Favoriler' ? ' font-bold' : 'text-gray-700 '}`}
                     >
                         Favoriler
                     </p>
                     <p
                         onClick={() => handleTabClick('Hakkımda')}
-                        className={`cursor-pointer ${activeTab === 'Hakkımda' ? ' font-bold' : 'text-gray-700'}`}
+                        className={` cursor-pointer ${activeTab === 'Hakkımda' ? ' font-bold' : 'text-gray-700 '}`}
                     >
                         Hakkımda
                     </p>
@@ -82,6 +88,11 @@ function ProfilePage() {
                         {activeTab === 'Tarifler' && (
                             <div>
                                 <h2>Tarifler İçeriği</h2>
+                            </div>
+                        )}
+                        {activeTab === 'Yazılar' && (
+                            <div>
+                                <h2>Yazılar İçeriği</h2>
                             </div>
                         )}
                         {activeTab === 'Favoriler' && (
