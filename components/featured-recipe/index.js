@@ -10,7 +10,7 @@ function FeaturedRecipe() {
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                const recipe = await fetch(`${config.backend_url}/recipes`, {
+                const recipe = await fetch(`${config.backend_url}/recipe`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
