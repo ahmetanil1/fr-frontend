@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
                 <div className="flex flex-col min-h-screen">
                     <div className="flex flex-col flex-grow mx-4 sm:mx-8 md:mx-16 lg:mx-32 xl:mx-64">
                         <Header toggleDarkMode={toggleDarkMode} darkMode={darkMode} />
-                        <hr className="border-gray-300 dark:border-gray-100" />
+                        <hr className="border-gray-300 dark:border-gray-500" />
                         <main className="flex-grow">{children}</main>
                     </div>
                     <Footer className="w-full" />

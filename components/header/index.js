@@ -6,7 +6,7 @@ import Profile from "./profile";
 import HamburgerMenu from "./hamburgerMenu";
 function header({ toggleDarkMode, darkMode }) {
     return (
-        <div className="flex items-center justify-between gap-3 md:gap-10  h-24 box-shadow ">
+        <div className="flex items-center justify-between gap-3 md:gap-10 h-24 box-shadow ">
             <div className="flex items-center gap-3 ">
                 <HamburgerMenu />
                 <Logo />
