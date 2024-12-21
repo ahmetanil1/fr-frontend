@@ -17,32 +17,32 @@ function LoginContainer() {
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
-
         try {
-            const response = await fetch(`${config.backend_url}/auth/login`, {
+            const response = await fetch(`${config.apiURL}/auth/login`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ email, password }),
-                credentials: 'include'
+                body: JSON.stringify({
+                    email,
+                    password
+                })
             });
-
+            const data = await response.json();
             if (response.ok) {
-                const data = await response.json();
-                console.log(data);
-                toast.success("Başarıyla giriş yaptınız.");
+                localStorage.setItem("token", data.token);
+                toast.success("Giriş başarılı. Yönlendiriliyorsunuz...");
                 router.push("/");
             } else {
-                console.log(response);
-                toast.error("Email veya şifre hatalı.");
+                toast.error(data.message);
             }
 
 
         } catch (error) {
-            console.error("Hata:", error);
+            console.error(error);
             toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
         }
+
     };
 
     return (

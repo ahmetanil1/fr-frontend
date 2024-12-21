@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import LoginRegister from '@/components/login-register';
-import WithRegister from '@/components/withRegister';
+// import WithRegister from '@/components/withRegister';
 import config from "@/config.json";
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
@@ -52,7 +52,7 @@ function RegisterContainer() {
             toast.error("Please check the form and try again.");
             return;
         }
-
+        //! Hata var fetch atmıyor.
         try {
             const response = await fetch(config.backend_url + "/auth/register", {
                 method: "POST",
@@ -72,13 +72,10 @@ function RegisterContainer() {
                     router.push("/login");  // Redirect to login page
                 }, 500);
             } else {
-                setErrorMessage(data.message || "An error occurred during registration.");
-                setIsToastVisible(true);  // Show toast if registration fails
+                console.error("Error:", error)
             }
         } catch (error) {
             console.error("Error:", error);
-            setErrorMessage("An error occurred while submitting the form.");
-            setIsToastVisible(true);  // Show toast on error
         }
     };
 

@@ -4,34 +4,22 @@ import React, { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
 import useUserStore from "@/store/useUserStore";
-import { fetchSingleUser, } from "@/services/users";
+import { fetchSingleUser } from "@/services/users";
 
 function Profile() {
     const [openMenu, setOpenMenu] = useState(false);
     const { user, setUser } = useUserStore();
 
 
-    // useEffect(() => {
-    //     const storedUser = JSON.parse(localStorage.getItem("user"));
-    //     if (storedUser) {
-    //         setUser(storedUser);
-    //     }
-    //     const fetchUser = async () => {
-    //         if (user && user.id) {
-    //             try {
-    //                 const data = await fetchSingleUser(user.id);
-    //                 if (data) {
-    //                     setUser(data);
-    //                     localStorage.setItem("user", JSON.stringify(data));
-
-    //                 }
-    //             } catch (error) {
-    //                 console.log("error:", error);
-    //             }
-    //         }
-    //     };
-    //     fetchUser();
-    // }, [user, setUser]);
+    useEffect(() => {
+        const fetchUser = async () => {
+            const user = await fetchSingleUser();
+            if (user) {
+                setUser(user);
+            }
+        };
+        fetchUser();
+    }, []);
 
 
     const handleLogout = () => {

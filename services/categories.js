@@ -37,7 +37,7 @@ import config from "@/config.json"
 
 export async function getCategories() {
     try {
-        const response = await fetch(config.backend_url + "/categories", {
+        const response = await fetch(config.backend_url + "/categorie", {
             method: "GET",
             credentials: "include",
         });
@@ -49,7 +49,7 @@ export async function getCategories() {
             return [];
         }
     } catch (error) {
-        console.error("Error:", error);
+        console.error("Error happened fetching categories:", error);
         return [];
     }
 }

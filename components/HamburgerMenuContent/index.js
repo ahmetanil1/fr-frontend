@@ -5,7 +5,7 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 const HamburgerMenuContent = () => {
-    const [categories, setCategories] = useState([]); // useState doğru şekilde tanımlandı
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -26,7 +26,7 @@ const HamburgerMenuContent = () => {
     return (
         <div className="dark:text-black">
             <div className="flex flex-wrap justify-center gap-4 mb-10 z-50">
-                {categories.map((category) => (
+                {categories.map((category) => {
                     <div
                         key={category.id}
                         className="relative cursor-pointer hover:scale-105 transition-transform"
@@ -47,7 +47,7 @@ const HamburgerMenuContent = () => {
                             {category.name}
                         </div>
                     </div>
-                ))}
+                })}
             </div>
         </div>
     );
