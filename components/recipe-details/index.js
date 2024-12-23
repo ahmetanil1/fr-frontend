@@ -26,8 +26,8 @@ function RecipeDetail() {
 
 
     return (
-        <div className='flex flex-col space-y-1 border border-black p-4'>
-            <div className="relative flex justify-center items-center  p-4 flex-col w-full h-[500px]">
+        <div className='flex flex-col space-y-1 pt-4'>
+            <div className="p-4 dark:border-gray-900 border rounded-lg shadow-lg relative flex justify-center items-center flex-col w-full h-[500px] ">
                 {/* Görsel */}
                 <Image
                     alt="yemek resmi"
@@ -35,7 +35,7 @@ function RecipeDetail() {
                     src="https://direktor.com.tr/wp-content/uploads/2024/05/yemek-fotograf-cekimi-fiyat-scaled-1.jpg"
                     layout="fill"
                     objectFit="cover"
-                    className="rounded-lg"
+                    className="rounded-lg "
                 />
                 {/* Yemek İsmi */}
                 <div className="absolute bottom-8  left-1/2 transform -translate-x-1/2 text-white text-4xl bg-black bg-opacity-50 px-8 py-2 rounded">
@@ -43,11 +43,11 @@ function RecipeDetail() {
                 </div>
             </div>
 
-            <div className='flex justify-center gap-3 border border-black p-4 w-full'>
-                <div className='space-y-4 border border-black p-4 w-/10 '>  {/*yemeği ilgilendiren kısımlar */}
+            <div className='flex justify-center gap-3  w-full'>
+                <div className='space-y-4  pt-4 w-/10 '>  {/*yemeği ilgilendiren kısımlar */}
                     <div className='flex justify-center gap-4'>
-                        <div className='border border-black flex flex-wrap'>
-                            <div className='gap-4 flex flex-wrap p-2 text-sm w-full '>
+                        <div className=' flex flex-wrap'>
+                            <div className=' dark:border-gray-900 border rounded-lg shadow-lg gap-4 flex flex-wrap p-2 text-sm w-full '>
                                 {/*
                                 {subCategories.map((subCategory) => {
                                         BÖYLE OLACAK DENEME İÇİN AŞAĞIDAKİLER YAZILDI
@@ -67,39 +67,41 @@ function RecipeDetail() {
 
                             </div>
                         </div>
-                        <div className='flex flex-col gap-4  border border-black p-4'>
+                        <div className='p-4 dark:border-gray-900 border rounded-lg shadow-lg flex flex-col gap-4 w-1/3 h-full '>
                             <div className='flex justify-center items-center '>
-                                <FaRegBookmark size={24} />
+                                <FaRegBookmark className='cursor-pointer' size={24} />
                             </div>
-                            <div className='text-sm'>
+                            <div className='text-xs flex justify-center w-full '>
                                 Tarif defterine ekle
                             </div>
                         </div>
                     </div>
-                    <Hr />
+                    
 
-                    <div>
-                        <div className='p-4'>Yemeğin Açıklaması</div>
-                        <Hr />
-                        <div className={` ${readMore ? "opacity-100 " : "opacity-50 "} `}>
+                    <div className="p-4 dark:border-gray-900 border rounded-lg shadow-lg">
+                        <div className="text-lg font-semibold mb-2">Yemeğin Açıklaması</div>
+                        <hr className="border-gray-300 mb-4" />
+                        {/* Transition için max-h ve overflow-hidden */}
+                        <div
+                            className={`transition-all duration-500 ease-in-out overflow-hidden ${readMore ? 'max-h-[500px] opacity-100' : 'max-h-[100px] opacity-50'
+                                }`}
+                        >
                             {readMore ? fullDescription : shortDescription}
                         </div>
-                        <div onClick={readMoreCaption} className='flex gap-4 justify-center items-center opacity-50 hover:opacity-100 cursor-pointer'>
-                            {!readMore && (
-                                <div
-                                    onClick={readMoreCaption}
-                                    className="flex gap-4 justify-center items-center opacity-50 hover:opacity-100 cursor-pointer mt-4"
-                                >
-                                    <div>Devamını oku</div>
-                                    <div>
-                                        <FaArrowCircleDown size={24} />
-                                    </div>
-                                </div>
-                            )}
+                        <div
+                            onClick={readMoreCaption}
+                            className="flex gap-2 justify-center items-center mt-4 text-gray-600 hover:text-gray-800 cursor-pointer"
+                        >
+                            <div>{readMore ? 'Daha Az Göster' : 'Devamını Oku'}</div>
+                            <FaArrowCircleDown
+                                size={24}
+                                className={`transition-transform ${readMore ? 'rotate-180' : ''
+                                    }`}
+                            />
                         </div>
                     </div>
                     <div>
-                        <div className='border border-dashed border-black p-4 '>
+                        <div className='p-4 dark:border-gray-900 border rounded-lg shadow-lg  '>
                             {!nutritionMore ? (
                                 <div>
                                     <div >
@@ -117,32 +119,34 @@ function RecipeDetail() {
                                         </ul>
                                     </div>
                                     <div className='pt-4'>Açıklama</div>
+                                    <b onClick={nutritionMoreCaption} className='underline cursor-pointer flex justify-end'>Kısalt </b>
 
                                 </div>
+
 
                             )}
                         </div>
                     </div>
-                    <Hr />
-                    <div className='flex justify-around'>
+                    
+                    <div className='flex justify-around p-4 dark:border-gray-900 border rounded-lg shadow-lg'>
                         <div className='flex flex-col p-4 '>
                             <div className='text-lg '>Kaç kişilik</div>
                             <div className='text-sm flex justify-center items-center pt-2'>1 porsiyon</div>
-                            <Hr />
+                            
                         </div>
                         <div className='flex flex-col p-4 '>
                             <div className='text-lg '>Hazırlanma süresi </div>
                             <div className='text-sm flex justify-center items-center pt-2'>10 dakika</div>
-                            <Hr />
+                            
                         </div>
                         <div className='flex flex-col p-4 '>
                             <div className='text-lg '>Pişme süresi </div>
                             <div className='text-sm flex justify-center items-center pt-2'>10 dakika</div>
-                            <Hr />
+                            
                         </div>
 
                     </div>
-                    <div>
+                    <div className='p-4 dark:border-gray-900 border rounded-lg shadow-lg'>
                         <div>
                             <div className='flex flex-col '>
                                 {/* <div>{`${recipe.title} için malzemeler`}</div> */}
@@ -163,7 +167,7 @@ function RecipeDetail() {
                             </div>
                         </div>
                     </div>
-                    <div className='flex flex-col gap-3'>
+                    <div className='flex flex-col gap-3 p-4 dark:border-gray-900 border rounded-lg shadow-lg'>
                         <div className='text-xl'>
                             {/* <div>{`${recipe.title} için yapılış adımları`}</div> */}
                             <div>Adımlar</div>
@@ -184,7 +188,7 @@ function RecipeDetail() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col items-center justify-center gap-4 p-4">
+                    <div className="flex flex-col justify-center dark:border-gray-900 border rounded-lg shadow-lg  gap-4 p-4">
                         {/* Başlık */}
                         <div className='flex w-full items-start'>
                             <div className="text-lg font-bold ">
@@ -193,10 +197,10 @@ function RecipeDetail() {
                         </div>
 
                         {/* Video Player */}
-                        <div className="w-full max-w-2xl">
+                        <div className="w-full max-w-2xl ">
                             <video
                                 controls
-                                className="w-full rounded-lg shadow-lg"
+                                className="w-full rounded-lg shadow-lg "
                             >
                                 <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
                                 Tarayıcınız video oynatmayı desteklemiyor.
@@ -209,10 +213,10 @@ function RecipeDetail() {
 
                     </div>
                 </div>
-                <div className='space-y-4 border border-black p-4'>
-                    <div className='flex flex-col gap-2'>
+                <div className='space-y-10 pt-4 '>
+                    <div className='flex flex-col gap-2 p-4 dark:border-gray-900 border rounded-lg shadow-lg'>
                         <div>Tarifi Puanla</div>
-                        <div className='flex gap-1.5 text-yellow-400'>
+                        <div className='flex gap-1.5 text-yellow-400 cursor-pointer'>
                             <FaStar />
                             <FaStar />
                             <FaStar />
@@ -221,8 +225,8 @@ function RecipeDetail() {
                         </div>
 
                     </div>
-                    <Hr />
-                    <div className='flex gap-4'>
+                    
+                    <div className='flex gap-4 p-4 dark:border-gray-900 border rounded-lg shadow-lg'>
                         <div>
                             <div >
                                 <Image
@@ -240,7 +244,7 @@ function RecipeDetail() {
                                 <div>isim Soyisim</div>
                                 <div className='text-sm'>Kullanıcının rolü</div>
                             </div>
-                            <div className="flex justify-center items-center py-1 border border-black rounded-md  hover:bg-gray-700 hover:text-gray-100 transition duration-300  ease-in-out dark:border-gray-300 dark:hover:bg-gray-100 dark:hover:text-gray-800">
+                            <div className="flex justify-center items-center py-1  rounded-md  hover:bg-gray-700 hover:text-gray-100 transition duration-300  ease-in-out dark:border-gray-300 dark:hover:bg-gray-100 dark:hover:text-gray-800">
                                 <button>Takip Et</button>
                             </div>
 
@@ -248,20 +252,21 @@ function RecipeDetail() {
                         </div>
 
                     </div>
-                    <Hr />
-                    <div>
-                        Sıkça yenen konular BU İSİM ALTTAKİLER GÖRÜNTÜ OLACKA
+                    
+                    <div className='p-4 dark:border-gray-900 border rounded-lg shadow-lg'>
+                        <div>
+                            Sıkça yenen konular BU İSİM ALTTAKİLER GÖRÜNTÜ OLACKA
+                        </div>
+                        <div>
+                            Sıkça yenen konular
+                        </div>
+                        <div>
+                            Sıkça yenen konular
+                        </div>
+                        <div>
+                            Sıkça yenen konular
+                        </div>
                     </div>
-                    <div>
-                        Sıkça yenen konular
-                    </div>
-                    <div>
-                        Sıkça yenen konular
-                    </div>
-                    <div>
-                        Sıkça yenen konular
-                    </div>
-
                 </div>
             </div>
         </div>

@@ -540,7 +540,7 @@ function CreateRecipe() {
                         <h3 className="py-4 text-lg">Video URL</h3>
                         <input
                             className="py-2 px-2 w-full"
-                            placeholder="Tarifinizin video linkini buraya ekleyebilirsiniz."
+                            placeholder="Tarifinizin video linkini buraya ekleyebilirsiniz. (URL GELMEYECEK İNPUT İLE VİDEOYU ALACAZ )"
                             onChange={handleAddVideo}
                         />
                     </div>
