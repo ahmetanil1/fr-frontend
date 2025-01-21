@@ -25,58 +25,57 @@ function RegisterContainer() {
             return false;
         }
 
-        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z]).{6,18}$/;
+        const passwordPattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
         if (!passwordPattern.test(password)) {
             toast.error("Password must be 6-18 characters long and contain at least one uppercase and one lowercase letter.");
             return false;
         }
 
-        const usernamePattern = /^[a-zA-Z0-9_]+$/;
+        const usernamePattern = /^[a-zA-Z0-9_]{3,20}$/;
         if (!usernamePattern.test(username)) {
             toast.error("Username can only contain letters, numbers, and underscores.");
             return false;
         }
 
-        if (!email.includes("@")) {
+
+        const emailPattern = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
+        if (!emailPattern.test(email)) {
             toast.error("Please enter a valid email.");
             return false;
         }
-
         return true;
     };
 
-    const handleSubmitRegister = async (e) => {
+    const handleSubmitRegister = (e) => {
         e.preventDefault();
-
         if (!validateForm()) {
-            toast.error("Please check the form and try again.");
             return;
         }
-        //! Hata var fetch atmıyor.
-        try {
-            const response = await fetch(config.backend_url + "/auth/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ username, name, surname, email, password }),
-                credentials: "include"
-            });
-
+        fetch(`${config.backend_url}/auth/signup`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username,
+                name,
+                surname,
+                email,
+                password
+            })
+        }).then(async (response) => {
             const data = await response.json();
             console.log(data);
-
             if (response.ok) {
-                toast.success("Registration successful. Redirecting to login page.");
-                setTimeout(() => {
-                    router.push("/login");  // Redirect to login page
-                }, 500);
+                toast.success("Registration successful. Redirecting...");
+                router.push("/login");
             } else {
-                console.error("Error:", error)
+                toast.error(data.message.tr);
             }
-        } catch (error) {
-            console.error("Error:", error);
-        }
+        }).catch((error) => {
+            console.error(error.message.tr);
+            toast.error("An error occurred. Please try again.");
+        });
     };
 
     return (

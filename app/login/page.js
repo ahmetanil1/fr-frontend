@@ -18,7 +18,7 @@ function LoginContainer() {
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`${config.apiURL}/auth/login`, {
+            const response = await fetch(`${config.backend_url}/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
