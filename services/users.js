@@ -2,7 +2,7 @@ import config from "@/config.json";
 
 export async function fetchAllUser() {
     try {
-        const response = await fetch(config.backend_url + "/user", {
+        const response = await fetch(config.backend_url + "/users", {
             method: "GET",
             credentials: "include",
         });
@@ -22,7 +22,7 @@ export async function fetchAllUser() {
 
 export async function fetchSingleUser() {
     try {
-        const response = await fetch(config.backend_url + "/user/me", {
+        const response = await fetch(config.backend_url + "/users/me", {
             method: "GET",
             credentials: "include",
         });
