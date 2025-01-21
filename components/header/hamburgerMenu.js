@@ -4,23 +4,14 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { IoReturnDownBackSharp } from "react-icons/io5";
 import Input from "../general/Input";
 import HamburgerMenuContent from "../hamburgerMenuContent";
-import { getCategories } from "../../services/categories";
 import { useRouter } from "next/navigation";
+import { getCategories } from '@/services/categories';
 
 function HamburgerMenu() {
     const [openMenu, setOpenMenu] = useState(false);
     const menuRef = useRef(null); // Ref to the menu container
-    const [categories, setCategories] = useState([]);
     const router = useRouter();
 
-    useEffect(() => {
-        // Kategorileri yükleme
-        const fetchCategories = async () => {
-            const data = getCategories();
-            setCategories(data);
-        };
-        fetchCategories();
-    }, []);
 
     const toggleMenu = () => {
         setOpenMenu(!openMenu);
@@ -55,6 +46,17 @@ function HamburgerMenu() {
         router.push(`/category/${categoryId}`);
         setOpenMenu(false); // Menü kapansın
     };
+
+    const [categories, setCategories] = useState([]);
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const data = await getCategories();
+            if (data) {
+                setCategories(data);
+            }
+        }
+        fetchCategories();
+    }, []);
 
 
 

@@ -1,16 +1,34 @@
+"use client";
 import FeaturedCategory from '@/components/featured-category'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { getCategories } from '@/services/categories';
 
-function CategoryContainer({ categories }) {
+
+function CategoryContainer() {
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const data = await getCategories();
+            if (data) {
+                setCategories(data);
+            }
+        }
+        fetchCategories();
+    }, []);
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {categories.map((category) => {
-                <FeaturedCategory key={category.id} category={category} />
-
-            })}
+        <div>
+            {categories.length > 0 && (
+                <div className='flex flex-row'>
+                    {categories.map((category, index) => (
+                        <div key={index} className='flex flex-grow'>
+                            <FeaturedCategory category={category} />
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
-
 
 export default CategoryContainer
