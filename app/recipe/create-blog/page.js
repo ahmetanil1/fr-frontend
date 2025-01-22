@@ -1,13 +1,14 @@
 "use client"
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import config from '@/config.json';
 import { FaCamera } from 'react-icons/fa';
 import { ImParagraphJustify } from "react-icons/im";
 import { IoMdVideocam } from "react-icons/io";
 import { FaTrash } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
-
+import dotenv from "dotenv"
+import Textarea from '@/components/general/Textarea';
+import Input from '@/components/general/Input';
 function CreateBlog() {
     const [texts, setTexts] = useState([]);
     const [images, setImages] = useState([]);
@@ -17,13 +18,14 @@ function CreateBlog() {
     const [imageUrls, setImageUrls] = useState([{ imageUrl: '', imageName: '' }])
     const [imageName, setImageName] = useState('')
     const router = useRouter();
+    const backend_url = process.env.BACKEND_URL;
     const handleSubmitBlog = async (e) => {
         e.preventDefault();
         const data = { texts, images, videos };
         console.log(data);
 
         try {
-            const response = await fetch(`${config.backend_url}/blog`, {
+            const response = await fetch(`${backend_url}/blog`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -112,29 +114,24 @@ function CreateBlog() {
                 <form onSubmit={handleSubmitBlog} className='space-y-10 w-full'>
 
                     <div className="relative">
-                        <textarea
-                            className="w-full px-2 py-2 h-12 text-xl border hover:border-dashed hover:border-gray-600 rounded-md"
-                            placeholder="Tarif başlığı"
-                            maxLength="90"
+                        <Textarea
+                            size="sm"
+                            placeholder="Tarif Başlığı"
                             value={text}
                             onChange={handleTextChangeNormal}
-                        ></textarea>
-                        <span className="absolute right-2 bottom-2 text-sm text-gray-500">
-                            {90 - text.length}
-                        </span>
+                            maxLength="90"
+                        />
+
                     </div>
 
                     <div className='relative py-2'>
-                        <textarea
-                            className='w-full px-2 text-sm py-2 h-24 border hover:border-dashed hover:border-gray-600 '
-                            placeholder='Tarifinizin ne kadar lezzetli olduğundan bahsettiğiniz giriş metnini buraya yazın.'
-                            maxLength="1000"
+                        <Textarea
+                            size="md"
+                            placeholder="Tarifinizin ne kadar lezzetli olduğundan bahsettiğiniz giriş metnini buraya yazın."
                             value={text2}
                             onChange={handleTextChangeNormal2}
-                        ></textarea>
-                        <span className="absolute right-2 bottom-3 text-sm text-gray-500">
-                            {1000 - text2.length}
-                        </span>
+                            maxLength="1000"
+                        />
                     </div>
 
                     <div className="relative w-full h-64 border border-black hover:border-dashed hover:border-gray-600 border-gray-300 rounded-md flex flex-col items-center justify-center">
@@ -188,17 +185,14 @@ function CreateBlog() {
                     </div>
 
                     {texts.slice(1).map((text, index) => (
-                        <div key={`text-${index}`} className="relative flex items-center">
-                            <textarea
-                                className='w-full px-2 text-sm py-2 h-24 border hover:border-dashed hover:border-gray-600 '
-                                placeholder='Tarifinizin ne kadar lezzetli olduğundan bahsettiğiniz giriş metnini buraya yazın.'
-                                maxLength="1000"
+                        <div key={`text-${index}`} className="relative items-center">
+                            <Textarea
+                                size="md"
+                                placeholder={`Metin ${index + 2}`}
                                 value={text}
                                 onChange={(e) => handleTextChange(e.target.value, index + 1)}
-                            ></textarea>
-                            <span className="absolute right-2 bottom-3 text-sm text-gray-500">
-                                {1000 - text.length}
-                            </span>
+                                maxLength="1000"
+                            />
                             {texts.length > 0 && (
                                 <button
                                     type="button"
@@ -287,17 +281,17 @@ function CreateBlog() {
                     </button>
 
                     {videos.map((video, index) => (
-                        <div key={`video-${index}`} className="relative flex items-center">
-                            <input
-                                className="w-full px-2 py-2 h-12 text-xl border hover:border-dashed hover:border-gray-600 rounded-md"
-                                placeholder={`Video ${index + 1} URL`}
+                        <div key={`video-${index}`} className="relative items-center">
+                            <Input
+                                size="wfull"
+                                placeholder={`Video ${index + 1}`}
                                 value={video}
                                 onChange={(e) => handleVideoChange(e.target.value, index)}
                             />
                             {videos.length > 0 && (
                                 <button
                                     type="button"
-                                    className="absolute right-2 "
+                                    className="absolute top-3 right-2 "
                                     onClick={() => handleRemoveVideo(index)}
                                 >
                                     <FaTrash />
@@ -319,7 +313,7 @@ function CreateBlog() {
                         <button
                             type='reset'
                             className="bg-gray-700 text-white hover:bg-gray-800 px-4 py-2 rounded-md mt-4"
-                            onClick={() => router.push("/recipe")}
+                            onClick={() => router.push("/user")}
                         >
                             İptal Et
                         </button>

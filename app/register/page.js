@@ -2,9 +2,10 @@
 import React, { useState } from 'react';
 import LoginRegister from '@/components/login-register';
 // import WithRegister from '@/components/withRegister';
-import config from "@/config.json";
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import dotenv from "dotenv";
+import Button from '@/components/general/Button';
 
 function RegisterContainer() {
     const [username, setUsername] = useState("");
@@ -14,9 +15,9 @@ function RegisterContainer() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
+
     const router = useRouter();
-
-
+    const backend_url = process.env.BACKEND_URL;
     const validateForm = () => {
 
 
@@ -51,7 +52,7 @@ function RegisterContainer() {
         if (!validateForm()) {
             return;
         }
-        fetch(`${config.backend_url}/auth/signup`, {
+        fetch(`${backend_url}/auth/signup`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -146,12 +147,12 @@ function RegisterContainer() {
                     </div>
 
 
-                    <button
+                    <Button
                         type="submit"
-                        className="w-full mb-2 text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-                    >
-                        Register
-                    </button>
+                        variant="default"
+                        size="md"
+                        className="w-full"
+                    >Register</Button>
                 </form>
             </div>
         </div>

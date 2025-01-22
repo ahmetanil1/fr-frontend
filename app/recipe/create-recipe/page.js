@@ -4,9 +4,13 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaC, FaCamera } from "react-icons/fa6";
 import { FaTrash } from "react-icons/fa";
-import config from "@/config.json";
 import { useRouter } from 'next/navigation';
 import { images } from '@/next.config';
+import dotenv from "dotenv"
+import { createNewRecipe } from '@/services/recipe';
+import Textarea from '@/components/general/Textarea';
+import Input from '@/components/general/Input';
+import Button from '@/components/general/Button';
 
 function CreateRecipe() {
     const [steps, setSteps] = useState([""]); // Initially one empty step
@@ -28,9 +32,9 @@ function CreateRecipe() {
     const [imagesGallery, setImagesGallery] = useState(['']);
     const router = useRouter();
     // Pişirme ve püf noktaları açıklama ve fotoğraf ekleme
+    const backend_url = process.env.BACKEND_URL;
 
-
-    const allTools = ["Fırın", "Mikrodalga", "Blender", "Tava", "Tencere", "Izgara"];
+    const allTools = ["Oven", "Microwave", "Blender", "Pan", "Pot", "Grill"];
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -40,20 +44,11 @@ function CreateRecipe() {
         console.log(data);
 
         try {
-            const response = await fetch(`${config.backend_url}/recipes`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
-            if (response.ok) {
-                toast.success("Recipe created successfully");
-            } else {
-                toast.error("Recipe creation failed");
-            }
+            await createNewRecipe(data);
+            toast.success("Tarif başarıyla oluşturuldu.");
         } catch (error) {
             console.log(error);
+            toast.error("Tarif oluşturulurken bir hata oluştu.");
         }
     };
 
@@ -165,33 +160,26 @@ function CreateRecipe() {
     return (
         <div className="flex flex-col justify-center items-center  ">
             <div className='flex justify-center font-bold text-xl pt-4'>
-                <h1>YENİ TARİF OLUŞTUR</h1>
+                <h1>CREATE A NEW RECİPE</h1>
             </div>
             <div className='flex flex-col md:flex-row justify-center  py-5 px-5 min-h-screen gap-10 w-full '>
                 <form onSubmit={handleSubmit} className='space-y-10'>
-                    <div className="relative">
-                        <textarea
-                            className="w-full px-2 py-2 h-12 text-xl border hover:border-dashed hover:border-gray-600 rounded-md"
-                            placeholder="Tarif başlığı"
-                            maxLength="90"
-                            value={text}
-                            onChange={handleTextChange}
-                        ></textarea>
-                        <span className="absolute right-2 bottom-2 text-sm text-gray-500">
-                            {90 - text.length}
-                        </span>
-                    </div>
+                    <Textarea
+                        size="sm"
+                        placeholder="Title of your recipe "
+                        value={text}
+                        onChange={handleTextChange}
+                        maxLength="90"
+                    />
+
                     <div className='relative py-2'>
-                        <textarea
-                            className='w-full px-2 text-sm py-2 h-24 border hover:border-dashed hover:border-gray-600 '
-                            placeholder='Tarifinizin ne kadar lezzetli olduğundan bahsettiğiniz giriş metnini buraya yazın.'
-                            maxLength="1000"
+                        <Textarea
+                            size="md"
+                            placeholder="Write the introductory text here where you talk about how delicious your recipe is."
                             value={text2}
                             onChange={handleTextChange2}
-                        ></textarea>
-                        <span className="absolute right-2 bottom-3 text-sm text-gray-500">
-                            {1000 - text2.length}
-                        </span>
+                            maxLength="1000"
+                        />
                     </div>
 
                     {/* Photo Upload Section */}
@@ -218,7 +206,7 @@ function CreateRecipe() {
                                     </div>
                                     <div>
                                         <p className="text-gray-700 dark:text-gray-100 font-medium mt-2">
-                                            Tarifinizin fotoğrafını ekleyin.
+                                            Add a photo of your recipe.
                                         </p>
                                     </div>
                                 </>
@@ -235,62 +223,46 @@ function CreateRecipe() {
                     </div>
 
                     <div className='flex flex-col gap-4'>
-                        <h2 className='text-lg'>Besin değerleri</h2>
-                        <div className='flex justify-between gap-4 px-4 py-10  border border-gray-400 hover:border-gray-600 rounded-md border-dashed'>
+                        <h2 className='text-lg'>Nutritional values</h2>
+                        <div className='flex flex-wrap justify-between gap-4 px-4 py-10  border border-gray-400 hover:border-gray-600 rounded-md border-dashed'>
                             <div>
-                                <h3 className='flex items-center justify-center mb-2'>Kalori</h3>
-                                <input
+                                <h3 className='flex items-center justify-center mb-2'>Calori</h3>
+                                <Input
                                     type='number'
-                                    className='w-32 h-8 px-2'
+                                    size="sm"
                                     placeholder='0 (cal)'
-                                    value={calories}
-                                    onChange={handleCalories}
-                                    name='calories'
-                                    min="1"
-                                    id='calories'
-                                    typeof="number"
                                 />
                             </div>
                             <div>
-                                <h3 className='flex items-center justify-center mb-2'>Yağ</h3>
-                                <input
-                                    type='number'
-                                    className='w-32 h-8 px-2'
-                                    placeholder='0 (g)'
+                                <h3 className='flex items-center justify-center mb-2'>Fats</h3>
+                                <Input
+                                    type="number"
+                                    size="sm"
+                                    placeholder="0 (g)"
+                                    min={1}
                                     value={fats}
                                     onChange={handleFats}
-                                    name='fats'
-                                    min="1"
-                                    id='fats'
-                                    typeof="number"
                                 />
                             </div>
                             <div>
                                 <h3 className='flex items-center justify-center mb-2'>Protein</h3>
-                                <input
-                                    type='number'
-                                    className='w-32 h-8 px-2'
-                                    placeholder='0 (g)'
+                                <Input
+                                    type="number"
+                                    size="sm"
+                                    placeholder="0 (g)"
+                                    min="1"
                                     value={proteins}
                                     onChange={handleProteins}
-                                    name='proteins'
-                                    min="1"
-                                    id='proteins'
-                                    typeof="number"
                                 />
                             </div>
                             <div>
-                                <h3 className='flex items-center justify-center mb-2'>Karbonhidrat</h3>
-                                <input
-                                    type='number'
-                                    className='w-32 h-8 px-2'
-                                    placeholder='0 (g)'
-                                    value={carbs}
-                                    onChange={handleCarbs}
-                                    name='carbs'
+                                <h3 className='flex items-center justify-center mb-2'>Carbohydrate</h3>
+                                <Input
+                                    type="number"
+                                    size="sm"
+                                    placeholder="0 (g)"
                                     min="1"
-                                    id='carbs'
-                                    typeof="number"
+                                    value={carbs}
                                 />
                             </div>
                         </div>
@@ -301,21 +273,18 @@ function CreateRecipe() {
                     <div className="flex flex-col sm:flex-row gap-4 border border-gray-300 hover:border-dashed hover:border-gray-600 py-10 sm:py-5 md:py-10 rounded-md">
                         {/* Portion */}
                         <div className="flex flex-col items-center gap-2 w-full sm:w-1/3">
-                            <h3>Kaç kişilik</h3>
+                            <h3>People</h3>
                             <div className="flex flex-col sm:flex-row justify-start space-x-0 md:space-y-0 space-y-3 sm:space-x-4">
-                                <input
+                                <Input
                                     type="number"
-                                    className="w-16 h-8 px-2 "
-                                    typeof="number"
-                                    id="portion"
-                                    onChange={handlePortion}
-                                    name="portion"
+                                    size="xs"
                                     min="1"
                                     placeholder="0"
                                     value={portion}
+                                    onChange={handlePortion}
                                 />
-                                <select className="w-32 h-8 px-2" defaultValue="PORSİYON">
-                                    <option disabled value="PORSİYON">PORSİYON</option>
+                                <select className="w-32 h-8 px-2" defaultValue="Portion">
+                                    <option disabled value="Portion">Portion</option>
                                     <option value="1-2">1-2</option>
                                     <option value="3-4">3-4</option>
                                     <option value="5-6">5-6</option>
@@ -327,50 +296,44 @@ function CreateRecipe() {
 
                         {/* Preparation Time */}
                         <div className="flex flex-col items-center gap-2 w-full sm:w-1/3">
-                            <h3>Hazırlanma Süresi</h3>
+                            <h3>Preparation Time</h3>
                             <div className="flex flex-col sm:flex-row justify-start md:space-y-0 space-y-3 space-x-0 sm:space-x-4">
-                                <input
+                                <Input
                                     type="number"
-                                    className="w-16 h-8 px-2"
-                                    typeof="number"
-                                    id="servingTime"
-                                    onChange={handleServingTime}
-                                    name="servingTime"
+                                    size="xs"
                                     min="1"
                                     placeholder="0"
                                     value={servingTime}
+                                    onChange={handleServingTime}
                                 />
-                                <select className="w-32 h-8 px-2" defaultValue="SÜRE">
-                                    <option disabled value="SÜRE">SÜRE</option>
-                                    <option value="Gün">Gün</option>
-                                    <option value="Saat">Saat</option>
-                                    <option value="Dakika">Dakika</option>
-                                    <option value="Saniye">Saniye</option>
+                                <select className="w-32 h-8 px-2" defaultValue="Time">
+                                    <option disabled value="Time">Time</option>
+                                    <option value="Day">Day</option>
+                                    <option value="Hour">Hour</option>
+                                    <option value="Minute">Minute</option>
+                                    <option value="Second">Second</option>
                                 </select>
                             </div>
                         </div>
 
                         {/* Cooking Time */}
                         <div className="flex flex-col items-center gap-2 w-full sm:w-1/3">
-                            <h3>Pişme Süresi</h3>
+                            <h3>Cooking Time</h3>
                             <div className="flex flex-col sm:flex-row justify-start md:space-y-0 space-y-3 space-x-0 sm:space-x-4">
-                                <input
+                                <Input
                                     type="number"
-                                    className="w-16 h-8 px-2"
-                                    typeof="number"
-                                    id="cookingtime"
-                                    onChange={handleCookingTime}
-                                    name="cookingtime"
+                                    size="xs"
                                     min="1"
                                     placeholder="0"
                                     value={cookingTime}
+                                    onChange={handleCookingTime}
                                 />
-                                <select className="w-32 h-8 px-2" defaultValue="SÜRE">
-                                    <option disabled value="SÜRE">SÜRE</option>
-                                    <option value="Gün">Gün</option>
-                                    <option value="Saat">Saat</option>
-                                    <option value="Dakika">Dakika</option>
-                                    <option value="Saniye">Saniye</option>
+                                <select className="w-32 h-8 px-2" defaultValue="Time">
+                                    <option disabled value="Time">Time</option>
+                                    <option value="Day">Day</option>
+                                    <option value="Hour">Hour</option>
+                                    <option value="Minute">Minute</option>
+                                    <option value="Second">Second</option>
                                 </select>
                             </div>
                         </div>
@@ -379,13 +342,13 @@ function CreateRecipe() {
                     {/* Steps Section */}
                     <div>
                         {steps.map((step, index) => (
-                            <div key={index} className="flex items-center gap-4 my-3">
+                            <div key={index} className=" items-center gap-4 my-3">
                                 <select
                                     value={step}
                                     onChange={(e) => handleStepChange(index, e.target.value)}
                                     className="w-full sm:w-1/2 border border-gray-300 rounded-md p-2"
                                 >
-                                    <option value="" disabled>Alet Seçin</option>
+                                    <option value="" disabled>Choose Tool</option>
                                     {getAvailableTools(index).map((tool) => (
                                         <option key={tool} value={tool}>
                                             {tool}
@@ -395,7 +358,7 @@ function CreateRecipe() {
                                 {steps.length > 1 && (
                                     <button
                                         onClick={() => removeStep(index)}
-                                        className="text-black dark:text-white px-1 py-1 rounded-md"
+                                        className="text-black dark:text-white ml-2 px-1 py-1 rounded-md"
                                     >
                                         <FaTrash />
                                     </button>
@@ -406,38 +369,38 @@ function CreateRecipe() {
                             onClick={addNewStep}
                             className="mt-2 text-white bg-gray-700 hover:bg-gray-800 px-4 py-2 rounded-md"
                         >
-                            Adım Ekle
+                            Add Step
                         </button>
                     </div>
 
                     {/* Ingredients Section */}
                     <div>
-                        <div className='text-lg'>Malzemeler</div>
+                        <div className='text-lg'>Ingredients</div>
                         {ingredients.map((ingredient, index) => (
                             <div key={index} className="flex gap-4 my-3 flex-col sm:flex-row">
-                                <input
+                                <Input
                                     type="text"
+                                    size="lg"
                                     name="name"
                                     value={ingredient.name}
-                                    placeholder="Malzeme adı"
+                                    placeholder="Ingredient"
                                     onChange={(e) => handleIngredientChange(index, e)}
-                                    className="w-full sm:w-1/3 border border-gray-300 rounded-md p-2"
                                 />
-                                <input
+                                <Input
                                     type="number"
+                                    size="lg"
                                     name="amount"
                                     value={ingredient.amount}
-                                    placeholder="Miktar"
+                                    placeholder="Amount"
                                     onChange={(e) => handleIngredientChange(index, e)}
-                                    className="w-full sm:w-1/3 border border-gray-300 rounded-md p-2"
                                 />
-                                <input
+                                <Input
                                     type="text"
+                                    size="lg"
                                     name="unit"
                                     value={ingredient.unit}
-                                    placeholder="Birim"
+                                    placeholder="Unit"
                                     onChange={(e) => handleIngredientChange(index, e)}
-                                    className="w-full sm:w-1/3 border border-gray-300 rounded-md p-2"
                                 />
                                 {ingredients.length > 1 && (
                                     <button
@@ -458,20 +421,20 @@ function CreateRecipe() {
                             onClick={handleAddIngredient}
                             className="text-white bg-gray-700 hover:bg-gray-800 px-4 py-2 rounded-md"
                         >
-                            Malzeme Ekle
+                            Add Ingredient
                         </button>
                     </div>
 
                     {/* Cooking Tips Section */}
                     <div className="py-3">
-                        <h3 className='text-lg'>Nasıl Yapılır?</h3>
+                        <h3 className='text-lg'>How to do?</h3>
                         {cookingTips.map((tip, index) => (
                             <div key={index} className="flex flex-col gap-4 my-3">
                                 <div className="flex justify-start items-center gap-4">
                                     <div>
                                         <input
                                             className="py-2 px-2 border border-gray-100 shadow-sm rounded-md"
-                                            placeholder="Adım Başlığı"
+                                            placeholder="Step Title"
                                         />
                                     </div>
                                     <div className="relative w-12 h-12 rounded-full flex items-center justify-center">
@@ -502,27 +465,25 @@ function CreateRecipe() {
 
                                 <div className="flex items-center gap-4 w-full">
                                     <div className="relative w-full">
-                                        <textarea
-                                            name="description"
-                                            placeholder="Adım açıklaması"
+                                        <Textarea
+                                            size="md"
+                                            placeholder="Step Description"
                                             value={text3}
-                                            maxLength={1000}
                                             onChange={handleTextChange3}
-                                            className="w-full border border-gray-300 rounded-md p-2"
+                                            maxLength="1000"
+
                                         />
-                                        <span className="absolute right-2 bottom-2 text-sm text-gray-500">
-                                            {1000 - text3.length}
-                                        </span>
+                                        {cookingTips.length > 1 && (
+                                            <button
+                                                type="button"
+                                                onClick={() => handleRemoveCookingTip(index)}
+                                                className="absolute top-2 right-2  text-black dark:text-white px-1 py-1 rounded-md"
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                        )}
                                     </div>
-                                    {cookingTips.length > 1 && (
-                                        <button
-                                            type="button"
-                                            onClick={() => handleRemoveCookingTip(index)}
-                                            className="text-black dark:text-white px-1 py-1 rounded-md"
-                                        >
-                                            <FaTrash />
-                                        </button>
-                                    )}
+
                                 </div>
                             </div>
                         ))}
@@ -531,23 +492,22 @@ function CreateRecipe() {
                             onClick={handleAddCookingTip}
                             className="mt-2 text-white bg-gray-700 hover:bg-gray-800 px-4 py-2 rounded-md"
                         >
-                            Adım Ekle
+                            Add Step
                         </button>
                     </div>
 
                     {/* Video URL Section */}
                     <div>
                         <h3 className="py-4 text-lg">Video URL</h3>
-                        <input
-                            className="py-2 px-2 w-full"
-                            placeholder="Tarifinizin video linkini buraya ekleyebilirsiniz. (URL GELMEYECEK İNPUT İLE VİDEOYU ALACAZ )"
-                            onChange={handleAddVideo}
+                        <Input
+                            size="wfull"
+                            placeholder="Video URL"
                         />
                     </div>
 
                     <div className="flex flex-col gap-4">
                         {/* Galeri Başlığı */}
-                        <h3 className="text-lg font-bold flex justify-start text-center">Galeri</h3>
+                        <h3 className="text-lg font-bold flex justify-start text-center">Gallery</h3>
 
                         {/* Resim Kutuları */}
                         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -593,7 +553,7 @@ function CreateRecipe() {
                                 onClick={handleAddImagesGallery}
                                 className="mt-4 text-white bg-gray-700 hover:bg-gray-800 px-6 py-2 rounded-md"
                             >
-                                Fotoğraf Ekle
+                                Add Photo
                             </button>
                         </div>
                     </div>
@@ -602,16 +562,18 @@ function CreateRecipe() {
 
                     {/* Submit Button */}
                     <div className="flex justify-center gap-4">
-                        <button
-                            type='reset'
-                            className="bg-gray-700 text-white hover:bg-gray-800 px-4 py-2 rounded-md mt-4"
-                            onClick={() => router.push("/recipe")}
-                        >
-                            İptal Et
-                        </button>
-                        <button className="bg-gray-700 text-white hover:bg-gray-800 px-4 py-2 rounded-md mt-4">
-                            Onay Butonu
-                        </button>
+                        <Button
+                            type="submit"
+                            variant="danger"
+                            size="md"
+                            className="mt-4"
+                        >Cancel</Button>
+                        <Button
+                            type="submit"
+                            variant="default"
+                            size="md"
+                            className="mt-4"
+                        >Submit</Button>
                     </div>
                 </form>
 
