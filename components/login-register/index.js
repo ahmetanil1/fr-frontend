@@ -19,7 +19,7 @@ function LoginRegister() {
             <Link
                 href="/login"
                 onClick={() => setSelected("login")}
-                className={`px-4 py-2 duration-300 rounded-md border border-gray-500 ${selected === "login" ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-700"
+                className={`px-4 py-2 duration-300 rounded-md  ${selected === "login" ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-700"
                     }`}
             >
                 Login
@@ -27,7 +27,7 @@ function LoginRegister() {
             <Link
                 href="/register"
                 onClick={() => setSelected("register")}
-                className={`px-4 py-2 duration-300 rounded-md border border-gray-500 ${selected === "register" ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-700"
+                className={`px-4 py-2 duration-300 rounded-md border bg-color-3100 ${selected === "register" ? "bg-gray-700 text-white" : "bg-gray-100 text-gray-700"
                     }`}
             >
                 Register
