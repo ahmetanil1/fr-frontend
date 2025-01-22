@@ -89,7 +89,11 @@ function HamburgerMenu() {
                     </div>
 
                     <div className="md:hidden" onClick={preventMenuClose}>
-                        <Input />
+                        <Input
+                            size="md"
+                            placeholder="Search"
+                            className="w-full"
+                        />
                     </div>
 
                     <div className="flex flex-col py-8 space-y-4 text-center max-h-[80vh]">
