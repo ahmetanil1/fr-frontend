@@ -4,22 +4,32 @@ import React, { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
 import useUserStore from "@/store/useUserStore";
-import { fetchSingleUser } from "@/services/users";
-
+import { getCurrentUser, loginUser } from "@/services/users";
 function Profile() {
     const [openMenu, setOpenMenu] = useState(false);
     const { user, setUser } = useUserStore();
-
+    const { token, setToken } = useState(null);
 
     useEffect(() => {
         const fetchUser = async () => {
-            const user = await fetchSingleUser();
-            if (user) {
-                setUser(user);
+            try {
+                const tokenFromHeader = await loginUser();
+                setToken(tokenFromHeader);
+
+                if (tokenFromHeader) {
+                    console.log("Profile içindeki Kullanıcı tokeni:", tokenFromHeader);
+                    const user = await getCurrentUser(tokenFromHeader);
+                    setUser(user);
+                }
+                else {
+                    console.error("Token not found in headers");
+                }
+            } catch (error) {
+                console.error("Error:", error);
             }
         };
         fetchUser();
-    }, []);
+    }, [])
 
 
     const handleLogout = () => {

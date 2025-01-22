@@ -4,44 +4,32 @@ import React, { useState } from 'react';
 import LoginRegister from '@/components/login-register';
 import WithRegister from '@/components/withRegister';
 import Link from 'next/link';
-import config from "@/config.json";
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-
-
+import dotenv from "dotenv";
+import { loginUser } from '@/services/users';
+import Button from '@/components/general/Button';
 
 function LoginContainer() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
 
+
+
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
+        const formData = new FormData(e.target);
+        const userData = Object.fromEntries(formData.entries());
         try {
-            const response = await fetch(`${config.backend_url}/auth/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                })
-            });
-            const data = await response.json();
-            if (response.ok) {
-                localStorage.setItem("token", data.token);
-                toast.success("Giriş başarılı. Yönlendiriliyorsunuz...");
-                router.push("/");
-            } else {
-                toast.error(data.message);
-            }
-
-
-        } catch (error) {
-            console.error(error);
-            toast.error("Bir hata oluştu. Lütfen tekrar deneyin.");
+            await loginUser(userData);
+            toast.success("Login success");
         }
+        catch (error) {
+            console.error("Login failed:", error.message);
+            toast.error("Login failed. Please check your credentials.");
+        }
+
 
     };
 
@@ -66,12 +54,13 @@ function LoginContainer() {
                     <div className='mt-4'>
                         <WithRegister />
                     </div>
-                    <button
+                    <Button
                         type="submit"
-                        className="w-full text-white bg-gray-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800"
-                    >
-                        Login
-                    </button>
+                        variant="default"
+                        size="md"
+                        className="w-full"
+                    >Login</Button>
+
                     <Link href="/forgot-password"
                         className="text-gray-600 hover:underline dark:text-white mt-4 flex justify-end">
                         Şifremi Unuttum
@@ -83,4 +72,4 @@ function LoginContainer() {
     )
 }
 
-export default LoginContainer
+export default LoginContainer  
