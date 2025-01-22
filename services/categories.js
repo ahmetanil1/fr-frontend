@@ -1,10 +1,12 @@
-import config from "@/config.json";
+import dotenv from "dotenv";
+
+const backend_url = process.env.BACKEND_URL;
 
 export async function getCategories() {
-    console.log(config.backend_url + "/categories");
+    console.log(backend_url + "/categories");
 
     try {
-        const response = await fetch(`${config.backend_url}/categories`, {
+        const response = await fetch(`${backend_url}/categories`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -16,7 +18,8 @@ export async function getCategories() {
             console.log("Categories:", data);
             return data;
         } else {
-            throw new Error("Error:", response.statusText);
+            throw new Error(response.statusText || "Unknown error");
+
         }
     } catch (error) {
         console.error("Error:", error);
@@ -25,7 +28,7 @@ export async function getCategories() {
 
 export async function createCategories() {
     try {
-        const response = await fetch(`${config.backend_url}/categories`, {
+        const response = await fetch(`${backend_url}/categories`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -38,7 +41,8 @@ export async function createCategories() {
             console.log("New Category:", data);
             return data;
         } else {
-            throw new Error("Error:", response.statusText);
+            throw new Error(response.statusText || "Unknown error");
+
         }
     } catch (error) {
         console.error("Error:", error);
@@ -46,9 +50,9 @@ export async function createCategories() {
 
 }
 
-export async function getSingleCategory() {
+export async function getSingleCategory(cat_id) {
     try {
-        const response = await fetch(`${config.backend_url}/categories/:id`, {
+        const response = await fetch(`${backend_url}/categories/${cat_id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -60,7 +64,8 @@ export async function getSingleCategory() {
             console.log("Single Category:", data);
             return data;
         } else {
-            throw new Error("Error:", response.statusText);
+            throw new Error(response.statusText || "Unknown error");
+
         }
 
     } catch (error) {
@@ -68,9 +73,9 @@ export async function getSingleCategory() {
     }
 }
 
-export async function updateCategory() {
+export async function updateCategory(cat_id) {
     try {
-        const response = await fetch(`${config.backend_url}/categories/:id`, {
+        const response = await fetch(`${backend_url}/categories/${cat_id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json"
@@ -83,22 +88,22 @@ export async function updateCategory() {
             console.log("Updated Category:", data);
             return data;
         } else {
-            throw new Error("Error:", response.statusText);
+            throw new Error(response.statusText || "Unknown error");
+
         }
     } catch (error) {
         console.error("Error:", error);
     }
 }
 
-export async function deleteCategory() {
+export async function deleteCategory(cat_id) {
 
     try {
-        const response = await fetch(`${config.backend_url}/categories/:id`, {
+        const response = await fetch(`${backend_url}/categories/${cat_id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
             },
-            credentials: "include"
         });
 
         if (response.ok) {
@@ -106,28 +111,29 @@ export async function deleteCategory() {
             console.log("Deleted Category:", data);
             return data;
         } else {
-            throw new Error("Error:", response.statusText);
+            throw new Error(response.statusText || "Unknown error");
+
         }
     } catch (error) {
         console.error("Error:", error);
     }
 }
 
-export async function getSubCategories() {
+export async function getSubCategories(subCat_id) {
     try {
-        const response = await fetch(`${config.backend_url}/categories/:id/subcategories`, {
+        const response = await fetch(`${backend_url}/categories/${subCat_id}/subcategories`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
             },
-            credentials: "include"
         });
         if (response.ok) {
             const data = await response.json();
             console.log("Sub Categories:", data);
             return data;
         } else {
-            throw new Error("Error:", response.statusText);
+            throw new Error(response.statusText || "Unknown error");
+
         }
     } catch (error) {
         console.error("Error:", error);
@@ -136,22 +142,22 @@ export async function getSubCategories() {
 }
 
 
-export async function getSlugCategories() {
+export async function getSlugCategories(slug) {
 
     try {
-        const response = await fetch(`${config.backend_url}/categories/:slug`, {
+        const response = await fetch(`${backend_url}/categories/${slug}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
             },
-            credentials: "include"
         });
         if (response.ok) {
             const data = await response.json();
             console.log("Categories with slug:", data);
             return data;
         } else {
-            throw new Error("Error:", response.statusText);
+            throw new Error(response.statusText || "Unknown error");
+
         }
 
     } catch (error) {
@@ -159,21 +165,21 @@ export async function getSlugCategories() {
     }
 }
 
-export async function getSlugSubCategories() {
+export async function getSlugSubCategories(slug) {
     try {
-        const response = await fetch(`${config.backend_url}/categories/slug/:slug`, {
+        const response = await fetch(`${backend_url}/categories/slug/${slug}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
             },
-            credentials: "include"
         });
         if (response.ok) {
             const data = await response.json();
             console.log("Sub Categories with slug:", data);
             return data;
         } else {
-            throw new Error("Error:", response.statusText);
+            throw new Error(response.statusText || "Unknown error");
+
         }
     } catch (error) {
         console.error("Error:", error);
