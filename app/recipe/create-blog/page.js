@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import dotenv from "dotenv"
 import Textarea from '@/components/general/Textarea';
 import Input from '@/components/general/Input';
+import Button from '@/components/general/Button';
 function CreateBlog() {
     const [texts, setTexts] = useState([]);
     const [images, setImages] = useState([]);
@@ -108,7 +109,7 @@ function CreateBlog() {
         <div className="flex flex-col justify-center items-center">
             <div className="w-full max-w-3xl px-4 ">
                 <div className='flex justify-center font-bold text-xl py-10'>
-                    <h1>YENİ BLOG OLUŞTUR</h1>
+                    <h1>CREATE A NEW BLOG</h1>
                 </div>
 
                 <form onSubmit={handleSubmitBlog} className='space-y-10 w-full'>
@@ -116,7 +117,7 @@ function CreateBlog() {
                     <div className="relative">
                         <Textarea
                             size="sm"
-                            placeholder="Tarif Başlığı"
+                            placeholder="Write the title of your recipe here."
                             value={text}
                             onChange={handleTextChangeNormal}
                             maxLength="90"
@@ -127,14 +128,14 @@ function CreateBlog() {
                     <div className='relative py-2'>
                         <Textarea
                             size="md"
-                            placeholder="Tarifinizin ne kadar lezzetli olduğundan bahsettiğiniz giriş metnini buraya yazın."
+                            placeholder="Write the introductory text here where you talk about how delicious your recipe is."
                             value={text2}
                             onChange={handleTextChangeNormal2}
                             maxLength="1000"
                         />
                     </div>
 
-                    <div className="relative w-full h-64 border border-black hover:border-dashed hover:border-gray-600 border-gray-300 rounded-md flex flex-col items-center justify-center">
+                    <div className="relative w-full h-64 border border-black  hover:border-gray-600 border-gray-300 rounded-md flex flex-col items-center justify-center">
                         <label
                             htmlFor="photo-upload"
                             className="flex flex-col items-center justify-center cursor-pointer"
@@ -144,7 +145,7 @@ function CreateBlog() {
                                     <img
                                         src={imageUrls[0].imageUrl}
                                         alt="Uploaded"
-                                        className="w-20 h-20 object-cover rounded-md"
+                                        className="w-48 h-48 object-cover rounded-md"
                                     />
                                     <p className="text-gray-700 dark:text-gray-100 font-medium mt-2">
                                         {imageName} {/* Display the image file name */}
@@ -169,7 +170,7 @@ function CreateBlog() {
                                     </div>
                                     <div className="mt-2">
                                         <span className="text-md text-gray-800 dark:text-gray-100">
-                                            Fotoğraf yükle
+                                            Upload Image
                                         </span>
                                     </div>
                                 </>
@@ -188,7 +189,7 @@ function CreateBlog() {
                         <div key={`text-${index}`} className="relative items-center">
                             <Textarea
                                 size="md"
-                                placeholder={`Metin ${index + 2}`}
+                                placeholder="Write the introductory text here where you talk about how delicious your recipe is."
                                 value={text}
                                 onChange={(e) => handleTextChange(e.target.value, index + 1)}
                                 maxLength="1000"
@@ -209,74 +210,78 @@ function CreateBlog() {
                             <ImParagraphJustify size={24} />
                         </div>
                         <div>
-                            <span>Metin Ekle</span>
+                            <span>Add Text</span>
                         </div>
                     </button>
 
-                    {images.map((image, index) => (
-                        <div key={`image-${index}`}>
-                            <label htmlFor={`photo-upload-${index}`} className="relative cursor-pointer w-full h-64 border border-black hover:border-dashed hover:border-gray-600 border-gray-300 rounded-md flex flex-col items-center justify-center">
-                                {image.imageUrl ? (
-                                    <div className="w-full h-auto flex flex-col items-center justify-center">
-                                        <img
-                                            src={image.imageUrl}
-                                            alt="Uploaded"
-                                            className="w-20 h-20 object-cover rounded-md"
-                                        />
-                                        <p className="text-gray-700 dark:text-gray-100 font-medium mt-2">
-                                            {imageName}
-                                            {/*DİĞER İMAGE İLE AYNI İMAGE YAZILIYO FİXLE */}
-                                        </p>
+                    {images.length > 0 && (
+                        <div className='flex flex-wrap gap-6 '>
+                        {images.map((image, index) => (
+                            <div key={`image-${index}`}>
+                                <label htmlFor={`photo-upload-${index}`} className="relative cursor-pointer w-32 h-32 rounded-md flex flex-col items-center justify-center">
+                                    {image.imageUrl ? (
+                                        <div className="w-full h-auto flex flex-col items-center justify-center ">
+                                            <img
+                                                src={image.imageUrl}
+                                                alt="Uploaded"
+                                                className="w-32 h-32 object-cover rounded-md"
+                                            />
+                                            <p className="text-gray-700 dark:text-gray-100 font-medium mt-2">
+                                                {imageName}
+                                                {/*DİĞER İMAGE İLE AYNI İMAGE YAZILIYO FİXLE */}
+                                            </p>
+                                            <button
+                                                type="button"
+                                                className="absolute top-3 right-2 "
+                                                onClick={() => {
+                                                    const newImageUrls = [...imageUrls];
+                                                    newImageUrls[0] = { imageUrl: '', name: '' }; // Reset the image URL and name
+                                                    setImageUrls(newImageUrls);
+                                                }}
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="bg-gray-800 dark:bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center">
+                                                <FaCamera className="text-white dark:text-gray-800" size={36} />
+                                            </div>
+                                            <div className="mt-2">
+                                                <span className="text-md text-gray-800 dark:text-gray-100">
+                                                    Upload Image
+                                                </span>
+                                            </div>
+                                        </>
+                                    )}
+                                    {images.length > 0 && (
                                         <button
                                             type="button"
                                             className="absolute top-3 right-2 "
-                                            onClick={() => {
-                                                const newImageUrls = [...imageUrls];
-                                                newImageUrls[0] = { imageUrl: '', name: '' }; // Reset the image URL and name
-                                                setImageUrls(newImageUrls);
-                                            }}
+                                            onClick={() => handleRemoveImage(index)}
                                         >
                                             <FaTrash />
                                         </button>
-                                    </div>
-                                ) : (
-                                    <>
-                                        <div className="bg-gray-800 dark:bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center">
-                                            <FaCamera className="text-white dark:text-gray-800" size={36} />
-                                        </div>
-                                        <div className="mt-2">
-                                            <span className="text-md text-gray-800 dark:text-gray-100">
-                                                Fotoğraf yükle
-                                            </span>
-                                        </div>
-                                    </>
-                                )}
-                                {images.length > 0 && (
-                                    <button
-                                        type="button"
-                                        className="absolute top-3 right-2 "
-                                        onClick={() => handleRemoveImage(index)}
-                                    >
-                                        <FaTrash />
-                                    </button>
-                                )}
-                                <input
-                                    id={`photo-upload-${index}`}
-                                    type="file"
-                                    accept="image/*"
-                                    className="sr-only"
-                                    onChange={(e) => handleImageChange(e.target.files[0], index)} // yalnızca ilgili index'i güncelle
-                                />
-                            </label>
-                        </div>
-                    ))}
+                                    )}
+                                    <input
+                                        id={`photo-upload-${index}`}
+                                        type="file"
+                                        accept="image/*"
+                                        className="sr-only"
+                                        onChange={(e) => handleImageChange(e.target.files[0], index)} // yalnızca ilgili index'i güncelle
+                                    />
+                                </label>
+                            </div>
+                        ))}
+                    </div>
+                    ) }
 
                     <button type="button" className="flex items-center gap-2" onClick={handleAddAnotherImage}>
                         <div>
                             <FaCamera size={24} />
                         </div>
                         <div>
-                            <span>Resim Ekle</span>
+                            <span>Add Image</span>
                         </div>
                     </button>
 
@@ -305,24 +310,31 @@ function CreateBlog() {
                             <IoMdVideocam size={24} />
                         </div>
                         <div>
-                            <span>Video Ekle</span>
+                            <span>Add Video</span>
                         </div>
                     </button>
 
                     <div className='flex pb-5 justify-center gap-4'>
-                        <button
-                            type='reset'
-                            className="bg-gray-700 text-white hover:bg-gray-800 px-4 py-2 rounded-md mt-4"
-                            onClick={() => router.push("/user")}
-                        >
-                            İptal Et
-                        </button>
-                        <button
-                            type="submit"
-                            className="bg-gray-700 text-white hover:bg-gray-800 px-4 py-2 rounded-md mt-4"
-                        >
-                            Blog Gönder
-                        </button>
+                        <div className="flex justify-center gap-4">
+                            <Button
+                                type="button"
+                                variant="danger"
+                                size="md"
+                                className="mt-4"
+                                onClick={() => router.push('/user')}
+                            >Cancel</Button>
+                            <Button
+                                type="submit"
+                                variant="default"
+                                size="md"
+                                className="mt-4"
+                                onClick={() => {
+                                    setTimeout(() => {
+                                        router.push("/user");
+                                    }, 1500);
+                                }}
+                            >Submit</Button>
+                        </div>
 
                     </div>
                 </form>
