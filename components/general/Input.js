@@ -16,7 +16,7 @@ function Input({ size, variant, type, className, placeholder, min, value, onChan
     }
 
     const variantClasses = {
-        default: "border border-gray-300 rounded-md flex dark:text-gray-900 dark:border-white",
+        default: "border border-gray-300 focus:border-gray-600 rounded-md flex dark:text-gray-900 dark:border-white",
     }
 
     const classes = clsx(baseClasses, sizeClasses[size], variantClasses[variant], className)

@@ -12,7 +12,7 @@ const Textarea = ({ size, variant, className, value, onChange, placeholder, maxL
     }
 
     const variantClasses = {
-        default: "border border-gray-300 rounded-md flex  dark:text-gray-900 dark:border-white"
+        default: "border border-black  focus:border-gray-600 border-gray-300 rounded-md flex  dark:text-gray-900 dark:border-white"
     }
 
     const classes = clsx(baseClasses, sizeClasses[size], variantClasses[variant], className)
