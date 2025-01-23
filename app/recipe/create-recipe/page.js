@@ -1,202 +1,101 @@
-
 "use client";
-import React, { useState } from 'react';
-import { toast } from 'react-toastify';
-import { FaC, FaCamera } from "react-icons/fa6";
-import { FaTrash } from "react-icons/fa";
-import { useRouter } from 'next/navigation';
-import { images } from '@/next.config';
-import dotenv from "dotenv"
-import { createNewRecipe } from '@/services/recipe';
+import React from 'react';
+import { FaCamera, FaTrash } from "react-icons/fa";
 import Textarea from '@/components/general/Textarea';
 import Input from '@/components/general/Input';
 import Button from '@/components/general/Button';
+import useFormDataStore from '@/store/useFormDataStore';
+import { createNewRecipe } from '@/services/recipe';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 function CreateRecipe() {
-    const [steps, setSteps] = useState([""]); // Initially one empty step
-    const [imageUrls, setImageUrls] = useState(['']);
-    const [videoUrls, setVideoUrls] = useState(['']);
-    const [text, setText] = useState("");
-    const [text2, setText2] = useState("");
-    const [text3, setText3] = useState("");
-    const [ingredients, setIngredients] = useState([{ name: "", amount: "", unit: "" }]); // Initially one empty ingredient 
-    const [cookingTips, setCookingTips] = useState([{ description: '', photoUrl: '' }]); // Yeni state ekledik
-    const [servingTime, setServingTime] = useState("");
-    const [portion, setPortion] = useState("");
-    const [cookingTime, setCookingTime] = useState("");
-    const [imageName, setImageName] = useState('');
-    const [calories, setCalories] = useState("");
-    const [fats, setFats] = useState("");
-    const [proteins, setProteins] = useState("");
-    const [carbs, setCarbs] = useState("");
-    const [imagesGallery, setImagesGallery] = useState(['']);
-    const router = useRouter();
-    // Pişirme ve püf noktaları açıklama ve fotoğraf ekleme
-    const backend_url = process.env.BACKEND_URL;
 
     const allTools = ["Oven", "Microwave", "Blender", "Pan", "Pot", "Grill"];
+    const {
+        formData,
+        updateField,
+        addIngredient,
+        removeIngredient,
+        updateIngredient,
+        addCookingTip,
+        removeCookingTip,
+        updateCookingTip,
+        addTools,
+        removeTools,
+        updateTools,
+        addStep,
+        removeStep,
+        updateStep,
+        addGallery,
+        removeGallery,
+        updateGallery,
+        resetForm,
+        setFormData
+    } = useFormDataStore();
 
-    const handleSubmit = async (e) => {
+    const router = useRouter();
+
+    const handleSubmitRecipe = async (e) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
-
-        console.log(data);
-
         try {
-            await createNewRecipe(data);
-            toast.success("Tarif başarıyla oluşturuldu.");
+            const response = await createNewRecipe(formData);
+            console.log(response);
+            if (response.ok) {
+                toast.success("Recipe created successfully.");
+                setFormData(formData);
+                router.push("/user");
+                resetForm();
+            } else {
+                toast.error("An error occurred while creating the recipe.");
+            }
         } catch (error) {
-            console.log(error);
-            toast.error("Tarif oluşturulurken bir hata oluştu.");
+            toast.error(error.message);
         }
     };
-
-    const handleTextChange = (e) => setText(e.target.value);
-    const handleTextChange2 = (e) => setText2(e.target.value);
-    const handleTextChange3 = (e) => setText3(e.target.value);
-
-
-    const addNewStep = () => {
-        setSteps([...steps, ""]);
-    };
-
-    const handleCalories = (e) => {
-        setCalories(e.target.value);
-    }
-    const handleFats = (e) => {
-        setFats(e.target.value);
-    }
-    const handleProteins = (e) => {
-        setProteins(e.target.value);
-    }
-    const handleCarbs = (e) => {
-        setCarbs(e.target.value);
-    }
-
-    const handleStepChange = (index, value) => {
-        const updatedSteps = [...steps];
-        updatedSteps[index] = value;
-        setSteps(updatedSteps);
-    };
-
-    const removeStep = (index) => {
-        const updatedSteps = steps.filter((_, i) => i !== index);
-        setSteps(updatedSteps);
-    };
-
-    const getAvailableTools = (currentIndex) => {
-        return allTools.filter((tool) => !steps.includes(tool) || steps[currentIndex] === tool);
-    };
-
-
-
-    const handleAddImage = (e, index) => {
-        const file = e.target.files[0];
-        if (file) {
-            const updatedImageUrls = [...imageUrls];
-            updatedImageUrls[index] = { imageUrl: URL.createObjectURL(file) }; // Update with new image URL
-            setImageUrls(updatedImageUrls);
-            setImageName(file.name); // Set the image file name
-        }
-    };
-
-
-    const handleAddVideo = () => {
-        setVideoUrls([...videoUrls, '']);
-    };
-
-
-
-    const handleIngredientChange = (index, e) => {
-        const updatedIngredients = [...ingredients];
-        updatedIngredients[index][e.target.name] = e.target.value;
-        setIngredients(updatedIngredients);
-    };
-
-    const handleAddIngredient = () => {
-        setIngredients([...ingredients, { name: "", amount: "", unit: "" }]);
-    };
-
-    const handleRemoveIngredient = (index) => {
-        const updatedIngredients = ingredients.filter((_, i) => i !== index);
-        setIngredients(updatedIngredients);
-    };
-
-
-    const handleAddCookingTip = () => {
-        setCookingTips([...cookingTips, { description: '', photoUrl: '' }]);
-    };
-
-    const handleRemoveCookingTip = (index) => {
-        const updatedCookingTips = cookingTips.filter((_, i) => i !== index);
-        setCookingTips(updatedCookingTips);
-    };
-
-    const handleImageCookingTips = (e, index) => {
-        const updatedCookingTips = [...cookingTips];
-        updatedCookingTips[index].photoUrl = URL.createObjectURL(e.target.files[0]);
-        setCookingTips(updatedCookingTips);
-    };
-
-    const handleAddImagesGallery = () => {
-        setImagesGallery([...imagesGallery, '']);
-    }
-    const handleRemoveImagesGallery = (index) => {
-        setImagesGallery(imagesGallery.filter((_, i) => i !== index));
-    }
-
-    const handleServingTime = (e) => {
-        setServingTime(e.target.value);
-    }
-
-    const handlePortion = (e) => {
-        setPortion(e.target.value);
-    }
-    const handleCookingTime = (e) => {
-        setCookingTime(e.target.value);
-    }
 
     return (
-        <div className="flex flex-col justify-center items-center  ">
+        <div className="flex flex-col justify-center items-center">
             <div className='flex justify-center font-bold text-xl pt-4'>
-                <h1>CREATE A NEW RECİPE</h1>
+                <h1>CREATE A NEW RECIPE</h1>
             </div>
-            <div className='flex flex-col md:flex-row justify-center  py-5 px-5 min-h-screen gap-10 w-full '>
-                <form onSubmit={handleSubmit} className='space-y-10'>
+            <div className='flex flex-col md:flex-row justify-center py-5 px-5 min-h-screen gap-10 w-full'>
+                <form aria-required onSubmit={handleSubmitRecipe} className='space-y-10'>
                     <Textarea
                         size="sm"
-                        placeholder="Title of your recipe "
-                        value={text}
-                        onChange={handleTextChange}
+                        variant="default"
+                        placeholder="Write the title of your recipe here."
+                        value={formData.title}
+                        onChange={(e) => updateField("title", e.target.value)}
                         maxLength="90"
                     />
 
                     <div className='relative py-2'>
                         <Textarea
                             size="md"
+                            variant="default"
                             placeholder="Write the introductory text here where you talk about how delicious your recipe is."
-                            value={text2}
-                            onChange={handleTextChange2}
+                            value={formData.description}
+                            onChange={(e) => updateField("description", e.target.value)}
                             maxLength="1000"
                         />
                     </div>
 
                     {/* Photo Upload Section */}
-                    <div className="relative w-full h-64 border border-black hover:border-dashed hover:border-gray-600 border-gray-300 rounded-md flex flex-col items-center justify-center">
+                    <div className="relative w-full h-64 border border-black  hover:border-gray-600 border-gray-300 rounded-md flex flex-col items-center justify-center">
                         <label
                             htmlFor="photo-upload"
                             className="flex flex-col items-center justify-center cursor-pointer"
                         >
-                            {imageUrls[0] && imageUrls[0].imageUrl ? (
+                            {formData.thumbnail ? (
                                 <div className="w-full h-auto flex flex-col items-center justify-center">
                                     <img
-                                        src={imageUrls[0].imageUrl}
+                                        src={formData.thumbnail}
                                         alt="Uploaded"
                                         className="w-20 h-20 object-cover rounded-md"
                                     />
                                     <p className="text-gray-700 dark:text-gray-100 font-medium mt-2">
-                                        {imageName} {/* Display the image file name */}
+                                        {formData.thumbnail} {/* Display the image file name */}
                                     </p>
                                 </div>
                             ) : (
@@ -210,7 +109,6 @@ function CreateRecipe() {
                                         </p>
                                     </div>
                                 </>
-
                             )}
                         </label>
                         <input
@@ -218,19 +116,23 @@ function CreateRecipe() {
                             type="file"
                             accept="image/*"
                             className="sr-only"
-                            onChange={(e) => handleAddImage(e, 0)}
+                            onChange={(e) => updateField('thumbnail', e.target.files[0])}
                         />
                     </div>
 
                     <div className='flex flex-col gap-4'>
                         <h2 className='text-lg'>Nutritional values</h2>
-                        <div className='flex flex-wrap justify-between gap-4 px-4 py-10  border border-gray-400 hover:border-gray-600 rounded-md border-dashed'>
+                        <div className='flex flex-wrap justify-between gap-4 px-4 py-10 border border-gray-400  rounded-md'>
                             <div>
                                 <h3 className='flex items-center justify-center mb-2'>Calori</h3>
                                 <Input
                                     type='number'
                                     size="sm"
+                                    min="0"
+                                    variant="default"
                                     placeholder='0 (cal)'
+                                    value={formData.nutrition.calories}
+                                    onChange={(e) => updateField('nutrition.calories', e.target.value)}
                                 />
                             </div>
                             <div>
@@ -238,10 +140,11 @@ function CreateRecipe() {
                                 <Input
                                     type="number"
                                     size="sm"
+                                    variant="default"
+                                    min="0"
                                     placeholder="0 (g)"
-                                    min={1}
-                                    value={fats}
-                                    onChange={handleFats}
+                                    value={formData.nutrition.fats}
+                                    onChange={(e) => updateField('nutrition.fats', e.target.value)}
                                 />
                             </div>
                             <div>
@@ -249,10 +152,11 @@ function CreateRecipe() {
                                 <Input
                                     type="number"
                                     size="sm"
+                                    min="0"
+                                    variant="default"
                                     placeholder="0 (g)"
-                                    min="1"
-                                    value={proteins}
-                                    onChange={handleProteins}
+                                    value={formData.nutrition.proteins}
+                                    onChange={(e) => updateField('nutrition.proteins', e.target.value)}
                                 />
                             </div>
                             <div>
@@ -260,17 +164,18 @@ function CreateRecipe() {
                                 <Input
                                     type="number"
                                     size="sm"
+                                    min="0"
+                                    variant="default"
                                     placeholder="0 (g)"
-                                    min="1"
-                                    value={carbs}
+                                    value={formData.nutrition.carbonhydrates}
+                                    onChange={(e) => updateField('nutrition.carbonhydrates', e.target.value)}
                                 />
                             </div>
                         </div>
                     </div>
 
-
                     {/* Form Inputs Section */}
-                    <div className="flex flex-col sm:flex-row gap-4 border border-gray-300 hover:border-dashed hover:border-gray-600 py-10 sm:py-5 md:py-10 rounded-md">
+                    <div className="flex flex-col sm:flex-row gap-4 border border-gray-400   py-10 sm:py-5 md:py-10 rounded-md">
                         {/* Portion */}
                         <div className="flex flex-col items-center gap-2 w-full sm:w-1/3">
                             <h3>People</h3>
@@ -278,10 +183,11 @@ function CreateRecipe() {
                                 <Input
                                     type="number"
                                     size="xs"
+                                    variant="default"
                                     min="1"
                                     placeholder="0"
-                                    value={portion}
-                                    onChange={handlePortion}
+                                    value={formData.portion}
+                                    onChange={(e) => updateField('portion', e.target.value)}
                                 />
                                 <select className="w-32 h-8 px-2" defaultValue="Portion">
                                     <option disabled value="Portion">Portion</option>
@@ -301,10 +207,11 @@ function CreateRecipe() {
                                 <Input
                                     type="number"
                                     size="xs"
+                                    variant="default"
                                     min="1"
                                     placeholder="0"
-                                    value={servingTime}
-                                    onChange={handleServingTime}
+                                    value={formData.preparing_time}
+                                    onChange={(e) => updateField('preparing_time', e.target.value)}
                                 />
                                 <select className="w-32 h-8 px-2" defaultValue="Time">
                                     <option disabled value="Time">Time</option>
@@ -323,10 +230,11 @@ function CreateRecipe() {
                                 <Input
                                     type="number"
                                     size="xs"
+                                    variant="default"
                                     min="1"
                                     placeholder="0"
-                                    value={cookingTime}
-                                    onChange={handleCookingTime}
+                                    value={formData.cooking_time}
+                                    onChange={(e) => updateField('cooking_time', e.target.value)}
                                 />
                                 <select className="w-32 h-8 px-2" defaultValue="Time">
                                     <option disabled value="Time">Time</option>
@@ -339,73 +247,28 @@ function CreateRecipe() {
                         </div>
                     </div>
 
-                    {/* Steps Section */}
                     <div>
-                        {steps.map((step, index) => (
-                            <div key={index} className=" items-center gap-4 my-3">
+                        {formData.tools.map((tool, index) => (
+                            <div key={index} className="flex gap-4 my-3">
                                 <select
-                                    value={step}
-                                    onChange={(e) => handleStepChange(index, e.target.value)}
-                                    className="w-full sm:w-1/2 border border-gray-300 rounded-md p-2"
+                                    value={tool}
+                                    onChange={(e) => updateTools(index, e.target.value)}
+                                    className="w-full sm:w-1/4 border border-gray-300 rounded-md p-2"
                                 >
-                                    <option value="" disabled>Choose Tool</option>
-                                    {getAvailableTools(index).map((tool) => (
-                                        <option key={tool} value={tool}>
-                                            {tool}
+                                    <option disabled value="">
+                                        Select Tool
+                                    </option>
+                                    {allTools.map((toolOption, toolIndex) => (
+                                        <option key={toolIndex} value={toolOption}>
+                                            {toolOption}
                                         </option>
                                     ))}
                                 </select>
-                                {steps.length > 1 && (
-                                    <button
-                                        onClick={() => removeStep(index)}
-                                        className="text-black dark:text-white ml-2 px-1 py-1 rounded-md"
-                                    >
-                                        <FaTrash />
-                                    </button>
-                                )}
-                            </div>
-                        ))}
-                        <button
-                            onClick={addNewStep}
-                            className="mt-2 text-white bg-gray-700 hover:bg-gray-800 px-4 py-2 rounded-md"
-                        >
-                            Add Step
-                        </button>
-                    </div>
 
-                    {/* Ingredients Section */}
-                    <div>
-                        <div className='text-lg'>Ingredients</div>
-                        {ingredients.map((ingredient, index) => (
-                            <div key={index} className="flex gap-4 my-3 flex-col sm:flex-row">
-                                <Input
-                                    type="text"
-                                    size="lg"
-                                    name="name"
-                                    value={ingredient.name}
-                                    placeholder="Ingredient"
-                                    onChange={(e) => handleIngredientChange(index, e)}
-                                />
-                                <Input
-                                    type="number"
-                                    size="lg"
-                                    name="amount"
-                                    value={ingredient.amount}
-                                    placeholder="Amount"
-                                    onChange={(e) => handleIngredientChange(index, e)}
-                                />
-                                <Input
-                                    type="text"
-                                    size="lg"
-                                    name="unit"
-                                    value={ingredient.unit}
-                                    placeholder="Unit"
-                                    onChange={(e) => handleIngredientChange(index, e)}
-                                />
-                                {ingredients.length > 1 && (
+                                {formData.tools.length > 1 && (
                                     <button
                                         type="button"
-                                        onClick={() => handleRemoveIngredient(index)}
+                                        onClick={() => removeTools(index)}
                                         className="text-black dark:text-white px-1 py-1 rounded-md"
                                     >
                                         <FaTrash />
@@ -413,12 +276,66 @@ function CreateRecipe() {
                                 )}
                             </div>
                         ))}
+
+                        <button
+                            type="button"
+                            onClick={addTools}
+                            className="mt-2 text-white bg-gray-700 hover:bg-gray-800 px-4 py-2 rounded-md"
+                        >
+                            Add Tool
+                        </button>
+                    </div>
+
+
+                    {/* Ingredients Section */}
+                    <div>
+                        <div className='text-lg pb-3'>Ingredients</div>
+                        <div className='border border-gray-400 rounded-md p-1'>
+                            {formData.ingredients.map((ingredient, index) => (
+                                <div key={index} className="flex gap-4 my-3 flex-col  sm:flex-row">
+                                    <Input
+                                        type="text"
+                                        size="lg"
+                                        name="name"
+                                        value={ingredient.name}
+                                        placeholder="Ingredient"
+                                        onChange={(e) => updateIngredient(index, 'name', e.target.value)}
+                                    />
+                                    <Input
+                                        type="number"
+                                        size="lg"
+                                        min="1"
+                                        name="amount"
+                                        value={ingredient.amount}
+                                        placeholder="Amount"
+                                        onChange={(e) => updateIngredient(index, 'amount', e.target.value)}
+                                    />
+                                    <Input
+                                        type="text"
+                                        size="lg"
+                                        name="unit"
+                                        value={ingredient.unit}
+                                        placeholder="Unit"
+                                        onChange={(e) => updateIngredient(index, 'unit', e.target.value)}
+                                    />
+                                    {formData.ingredients.length > 1 && (
+                                        <button
+                                            type="button"
+                                            onClick={() => removeIngredient(index)}
+                                            className="text-black dark:text-white px-1 py-1 rounded-md"
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     <div>
                         <button
                             type="button"
-                            onClick={handleAddIngredient}
+                            onClick={addIngredient}
                             className="text-white bg-gray-700 hover:bg-gray-800 px-4 py-2 rounded-md"
                         >
                             Add Ingredient
@@ -428,13 +345,15 @@ function CreateRecipe() {
                     {/* Cooking Tips Section */}
                     <div className="py-3">
                         <h3 className='text-lg'>How to do?</h3>
-                        {cookingTips.map((tip, index) => (
+                        {formData.cookingTips.map((tip, index) => (
                             <div key={index} className="flex flex-col gap-4 my-3">
                                 <div className="flex justify-start items-center gap-4">
                                     <div>
                                         <input
                                             className="py-2 px-2 border border-gray-100 shadow-sm rounded-md"
                                             placeholder="Step Title"
+                                            value={tip.title}
+                                            onChange={(e) => updateCookingTip(index, 'title', e.target.value)}
                                         />
                                     </div>
                                     <div className="relative w-12 h-12 rounded-full flex items-center justify-center">
@@ -451,7 +370,7 @@ function CreateRecipe() {
                                             type="file"
                                             accept="image/*"
                                             className="sr-only"
-                                            onChange={(e) => handleImageCookingTips(e, index)}
+                                            onChange={(e) => updateCookingTip(index, 'photoUrl', URL.createObjectURL(e.target.files[0]))}
                                         />
                                         {tip.photoUrl && (
                                             <img
@@ -468,28 +387,26 @@ function CreateRecipe() {
                                         <Textarea
                                             size="md"
                                             placeholder="Step Description"
-                                            value={text3}
-                                            onChange={handleTextChange3}
+                                            value={tip.description}
+                                            onChange={(e) => updateCookingTip(index, 'description', e.target.value)}
                                             maxLength="1000"
-
                                         />
-                                        {cookingTips.length > 1 && (
+                                        {formData.cookingTips.length > 1 && (
                                             <button
                                                 type="button"
-                                                onClick={() => handleRemoveCookingTip(index)}
-                                                className="absolute top-2 right-2  text-black dark:text-white px-1 py-1 rounded-md"
+                                                onClick={() => removeCookingTip(index)}
+                                                className="absolute top-2 right-2 text-black dark:text-white px-1 py-1 rounded-md"
                                             >
                                                 <FaTrash />
                                             </button>
                                         )}
                                     </div>
-
                                 </div>
                             </div>
                         ))}
                         <button
                             type="button"
-                            onClick={handleAddCookingTip}
+                            onClick={addCookingTip}
                             className="mt-2 text-white bg-gray-700 hover:bg-gray-800 px-4 py-2 rounded-md"
                         >
                             Add Step
@@ -502,41 +419,51 @@ function CreateRecipe() {
                         <Input
                             size="wfull"
                             placeholder="Video URL"
+                            value={formData.videoUrl}
+                            onChange={(e) => updateField('videoUrl', e.target.value)}
                         />
                     </div>
 
                     <div className="flex flex-col gap-4">
-                        {/* Galeri Başlığı */}
+                        {/* Gallery Title */}
                         <h3 className="text-lg font-bold flex justify-start text-center">Gallery</h3>
 
-                        {/* Resim Kutuları */}
+                        {/* Image Boxes */}
                         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                            {imagesGallery.map((image, index) => (
+                            {formData.gallery.map((image, index) => (
                                 <div key={index} className="relative group">
-                                    {image.imageUrl > 1 ? (
+                                    {image && image.length > 1 ? (
                                         <div className="relative">
                                             <input
                                                 id={`photo-upload-${index}`}
                                                 type="file"
                                                 accept="image/*"
                                                 className="sr-only"
-                                                onChange={(e) => handleAddImagesGallery(e, index)}
+                                                // onChange={(e) => updateGallery(index, URL.createObjectURL(e.target.files[0]))}
+                                                onChange={(e) => updateGallery(index, e.target.files[0])}
                                             />
-                                            {image.photoUrl && (
+                                            <button
+                                                type="button"
+                                                onClick={() => removeGallery(index)}
+                                                className="absolute top-2 right-2 text-black dark:text-white px-1 py-1 rounded-md"
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                            {image && (
                                                 <img
-                                                    src={image.photoUrl}
-                                                    alt={`Cooking Tip ${index}`}
+                                                    src={image}
+                                                    alt={`Gallery Image ${index}`}
                                                     className="absolute inset-0 w-full h-full object-cover"
                                                 />
                                             )}
                                         </div>
                                     ) : (
-                                        <div className="w-32 h-32 flex items-center justify-center border-2 border-dashed rounded-md cursor-pointer">
+                                        <div className="w-32 h-32 flex items-center justify-center border-2  rounded-md cursor-pointer">
                                             <label
                                                 htmlFor={`photo-upload-${index}`}
                                                 className="flex items-center justify-center cursor-pointer w-full h-full"
                                             >
-                                                <div className="bg-gray-800 w-10 h-10 rounded-md  flex items-center justify-center">
+                                                <div className="bg-gray-800 w-10 h-10 rounded-md flex items-center justify-center">
                                                     <FaCamera className="text-white" size={16} />
                                                 </div>
                                             </label>
@@ -546,27 +473,27 @@ function CreateRecipe() {
                             ))}
                         </div>
 
-                        {/* Fotoğraf Ekle Butonu */}
+                        {/* Add Photo Button */}
                         <div className="text-center flex justify-start">
                             <button
                                 type="button"
-                                onClick={handleAddImagesGallery}
+                                onClick={addGallery}
                                 className="mt-4 text-white bg-gray-700 hover:bg-gray-800 px-6 py-2 rounded-md"
                             >
                                 Add Photo
                             </button>
+
                         </div>
                     </div>
-
-
 
                     {/* Submit Button */}
                     <div className="flex justify-center gap-4">
                         <Button
-                            type="submit"
+                            type="button"
                             variant="danger"
                             size="md"
                             className="mt-4"
+                            onClick={() => router.push('/user')}
                         >Cancel</Button>
                         <Button
                             type="submit"
@@ -576,11 +503,8 @@ function CreateRecipe() {
                         >Submit</Button>
                     </div>
                 </form>
-
-
-
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }
 
