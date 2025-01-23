@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { toast } from 'react-toastify';
 
 const backend_url = process.env.BACKEND_URL;
 

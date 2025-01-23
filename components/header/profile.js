@@ -25,7 +25,7 @@ function Profile() {
                     console.error("Token not found in headers");
                 }
             } catch (error) {
-                console.error("Error:", error);
+                console.error("Error while fetching user:", error);
             }
         };
         fetchUser();

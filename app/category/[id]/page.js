@@ -1,5 +1,5 @@
 import CategoryContainer from '@/containers/category'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 async function CategoryPage() {
 
