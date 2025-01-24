@@ -45,7 +45,12 @@ const useFormDataStore = create((set) => ({
         setCookingTips: (cooking_tips) => set({ formData: { ...formData, cooking_tips } }),
         videoUrl: "",
         setVideoUrl: (videoUrl) => set({ formData: { ...formData, videoUrl } }),
-        gallery: [],
+        gallery: [
+            {
+                id: "",
+                imageUrl: ""
+            }
+        ],
         setGallery: (gallery) => set({ formData: { ...formData, gallery } }),
     },
     updateField: () =>

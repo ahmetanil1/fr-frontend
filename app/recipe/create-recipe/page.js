@@ -427,51 +427,59 @@ function CreateRecipe() {
                     <div className="flex flex-col gap-4">
                         {/* Gallery Title */}
                         <h3 className="text-lg font-bold flex justify-start text-center">Gallery</h3>
-
-                        {/* Image Boxes */}
-                        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                            {formData.gallery.map((image, index) => (
-                                <div key={index} className="relative group">
-                                    {image && image.length > 1 ? (
-                                        <div className="relative">
+                        {formData.gallery.length > 0 && (
+                            <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                                {formData.gallery.map((image, index) => (
+                                    <div key={index} className="relative group">
+                                        <label htmlFor={`photo-upload-${index}`} className="relative cursor-pointer w-32 h-32 rounded-md flex flex-col items-center justify-center">
+                                            {image.imageUrl ? (
+                                                <div className="w-full h-auto flex flex-col items-center justify-center">
+                                                    <img
+                                                        src={image.imageUrl}
+                                                        alt={`Gallery ${index}`}
+                                                        className="w-full h-32 object-cover rounded-md"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeGallery(index)}
+                                                        className="absolute top-3 right-2"
+                                                    >
+                                                        <FaTrash />
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <div className="w-full md:h-32 h-20 flex items-center justify-center border-2  rounded-md cursor-pointer">
+                                                    <label
+                                                        htmlFor={`photo-upload-${index}`}
+                                                        className="flex items-center justify-center cursor-pointer w-full h-full"
+                                                    >
+                                                        <div className="bg-gray-800 w-10 h-10 rounded-md flex items-center justify-center">
+                                                            <FaCamera className="text-white" size={16} />
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            )}
+                                            {formData.gallery.length > 1 && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeGallery(index)}
+                                                    className="absolute top-3 right-2"
+                                                >
+                                                    <FaTrash />
+                                                </button>
+                                            )}
                                             <input
                                                 id={`photo-upload-${index}`}
                                                 type="file"
                                                 accept="image/*"
                                                 className="sr-only"
-                                                // onChange={(e) => updateGallery(index, URL.createObjectURL(e.target.files[0]))}
-                                                onChange={(e) => updateGallery(index, e.target.files[0])}
+                                                onChange={(e) => updateGallery(index, URL.createObjectURL(e.target.files[0]))}
                                             />
-                                            <button
-                                                type="button"
-                                                onClick={() => removeGallery(index)}
-                                                className="absolute top-2 right-2 text-black dark:text-white px-1 py-1 rounded-md"
-                                            >
-                                                <FaTrash />
-                                            </button>
-                                            {image && (
-                                                <img
-                                                    src={image}
-                                                    alt={`Gallery Image ${index}`}
-                                                    className="absolute inset-0 w-full h-full object-cover"
-                                                />
-                                            )}
-                                        </div>
-                                    ) : (
-                                        <div className="w-32 h-32 flex items-center justify-center border-2  rounded-md cursor-pointer">
-                                            <label
-                                                htmlFor={`photo-upload-${index}`}
-                                                className="flex items-center justify-center cursor-pointer w-full h-full"
-                                            >
-                                                <div className="bg-gray-800 w-10 h-10 rounded-md flex items-center justify-center">
-                                                    <FaCamera className="text-white" size={16} />
-                                                </div>
-                                            </label>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
 
                         {/* Add Photo Button */}
                         <div className="text-center flex justify-start">
@@ -503,8 +511,8 @@ function CreateRecipe() {
                         >Submit</Button>
                     </div>
                 </form>
-            </div >
-        </div >
+            </div>
+        </div>
     );
 }
 
