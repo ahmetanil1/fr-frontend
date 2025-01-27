@@ -53,13 +53,15 @@ const useFormDataStore = create((set) => ({
         ],
         setGallery: (gallery) => set({ formData: { ...formData, gallery } }),
     },
-    updateField: () =>
+    updateField: (field, value) =>
         set((state) => ({
             formData: {
                 ...state.formData,
-                [field]: value
+                [field]: value,
             },
         })),
+
+        
     setField: (field, value) =>
         set((state) => ({
             formData: {

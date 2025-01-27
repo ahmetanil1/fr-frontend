@@ -9,8 +9,12 @@ import Input from '@/components/general/Input';
 import Button from '@/components/general/Button';
 import useBlogFormDataStore from "@/store/useBlogFormDataStore";
 
+import { useRouter } from 'next/navigation';
+
 
 function CreateBlog() {
+    const router = useRouter();
+
     const {
         blogFormData,
         setBlogFormData,
@@ -181,7 +185,7 @@ function CreateBlog() {
                                             type="file"
                                             accept="image/*"
                                             className="sr-only"
-                                            onchange={(e) => updateGallery(index, URL.createObjectURL(e.target.files[0]))}
+                                            onChange={(e) => updateGallery(index, URL.createObjectURL(e.target.files[0]))}
                                         />
                                     </label>
                                 </div>
