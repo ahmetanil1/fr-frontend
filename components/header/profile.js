@@ -7,7 +7,7 @@ import useUserStore from "@/store/useUserStore";
 import { getCurrentUser, loginUser } from "@/services/users";
 function Profile() {
     const [openMenu, setOpenMenu] = useState(false);
-    const { user, setUser } = useUserStore();
+    const { user, setUser } = useState();
     const { token, setToken } = useState(null);
 
     useEffect(() => {
@@ -74,18 +74,25 @@ function Profile() {
                         {user ? (
                             <>
                                 <Link
+                                    href="/admin/create-recipe"
+                                    className="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer"
+                                >
+                                    Add Recipe
+                                </Link>
+                                {/* <Link
+                                    href="/settings"
+                                    className="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer"
+                                >
+                                    Settings
+                                </Link> */}
+                                <Link
                                     href="/login"
                                     onClick={handleLogout}
                                     className="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer"
                                 >
                                     Logout
                                 </Link>
-                                <Link
-                                    href="/admin/create-recipe"
-                                    className="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer"
-                                >
-                                    Add Recipe
-                                </Link>
+
                             </>
                         ) : (
                             <>
@@ -102,6 +109,12 @@ function Profile() {
                                     onClick={() => setOpenMenu(false)}
                                 >
                                     Register
+                                </Link>
+                                <Link
+                                    href="/settings"
+                                    className="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer"
+                                >
+                                    Settings
                                 </Link>
                             </>
                         )}
