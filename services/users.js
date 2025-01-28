@@ -1,7 +1,6 @@
-import dotenv from "dotenv";
 import { toast } from 'react-toastify';
 
-const backend_url = process.env.BACKEND_URL;
+const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export async function GetSingleUser(user_id) {
     try {
@@ -118,29 +117,30 @@ export async function unfollowUser(user_id) {
     }
 }
 
-export async function getCurrentUser(token) {
+export async function getCurrentUser() {
     try {
         const response = await fetch(`${backend_url}/users/me`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
             },
             credentials: "include"
         });
+
         if (response.ok) {
             const data = await response.json();
             console.log("Current User:", data);
             return data;
         } else {
-            throw new Error(response.statusText || "Unknown error");
-
+            throw new Error(response.statusText || "Failed to fetch current user");
         }
 
     } catch (error) {
         console.error("Error:", error);
+        return { error: error.message };
     }
 }
+
 
 export async function upgradeCurrentUser(token) {
     try {
@@ -176,22 +176,61 @@ export const loginUser = async (userData) => {
             },
             body: JSON.stringify(userData)
         });
+
         if (!response.ok) {
             throw new Error("Login failed");
         }
-
-        const token = response.headers.get("Authorization");
-        //! HEADERDAN TOKEN ALMA  
-
-        if (token) {
-            console.log("Token retrivied", token)
-            return token;
-        } else {
-            throw new Error("Token not found in headers");
-        }
-
+        const data = await response.json();
+        console.log("Login data:", data);
+        return data;
     } catch (error) {
-        console.error(error);
-        toast.error(error.message.tr);
+        return { error: error.message };
+    }
+};
+
+export const logoutUser = async () => {
+    try {
+        const response = await fetch(`${backend_url}/auth/logout`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("Logout data:", data);
+            return data;
+        }
+        else {
+            throw new Error(response.statusText || "Unknown error");
+        }
+    } catch (error) {
+        return { error: error.message };
+    }
+}
+
+
+export const createUser = async (userData) => {
+    try {
+        const response = await fetch(`${backend_url}/auth/signup`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userData)
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log("User data:", data);
+            return data;
+        }
+        else {
+            throw new Error(response.statusText || "Unknown error");
+        }
+    } catch (error) {
+        return { error: error.message };
     }
 }

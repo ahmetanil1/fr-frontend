@@ -1,41 +1,21 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
-import useUserStore from "@/store/useUserStore";
-import { getCurrentUser, loginUser } from "@/services/users";
-function Profile() {
+import { logoutUser } from "@/services/users";
+import { toast } from "react-toastify";
+
+function Profile({ user, onLogout }) {
     const [openMenu, setOpenMenu] = useState(false);
-    const { user, setUser } = useState();
-    const { token, setToken } = useState(null);
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const tokenFromHeader = await loginUser();
-                setToken(tokenFromHeader);
-
-                if (tokenFromHeader) {
-                    console.log("Profile içindeki Kullanıcı tokeni:", tokenFromHeader);
-                    const user = await getCurrentUser(tokenFromHeader);
-                    setUser(user);
-                }
-                else {
-                    console.error("Token not found in headers");
-                }
-            } catch (error) {
-                console.error("Error while fetching user:", error);
-            }
-        };
-        fetchUser();
-    }, [])
-
-
-    const handleLogout = () => {
-        // Logout işlemleri burada yapılabilir
-        setUser(null);
-        console.log("Kullanıcı çıkış yaptı.");
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+            setOpenMenu(false);
+            onLogout();
+            toast.success("Logout success");
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
     };
 
     return (
@@ -43,25 +23,14 @@ function Profile() {
             <div onClick={() => setOpenMenu(!openMenu)} className="cursor-pointer">
                 {user ? (
                     <>
-                        {user.gender === "male" ? ( // Doğru karşılaştırma için `===` kullanıldı
-                            <img
-                                src={
-                                    user.profileImage ||
-                                    "https://via.placeholder.com/150?text=Default+Male+Avatar"
-                                }
-                                alt={user.name}
-                                className="w-8 h-8 rounded-full"
-                            />
-                        ) : (
-                            <img
-                                src={
-                                    user.profileImage ||
-                                    "https://via.placeholder.com/150?text=Default+Female+Avatar"
-                                }
-                                alt={user.name}
-                                className="w-8 h-8 rounded-full"
-                            />
-                        )}
+                        <img
+                            src={user.profileImage ||
+                                (user.gender === "male" ?
+                                    "https://via.placeholder.com/150?text=Default+Male+Avatar" :
+                                    "https://via.placeholder.com/150?text=Default+Female+Avatar")}
+                            alt={user.name}
+                            className="w-8 h-8 rounded-full"
+                        />
                     </>
                 ) : (
                     <CgProfile size="35" />
@@ -74,17 +43,15 @@ function Profile() {
                         {user ? (
                             <>
                                 <Link
-                                    href="/admin/create-recipe"
+                                    href="/recipe/create-recipe"
                                     className="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer"
                                 >
                                     Add Recipe
                                 </Link>
-                                {/* <Link
+                                <Link
                                     href="/settings"
                                     className="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer"
-                                >
-                                    Settings
-                                </Link> */}
+                                >Settings</Link>
                                 <Link
                                     href="/login"
                                     onClick={handleLogout}
@@ -92,7 +59,6 @@ function Profile() {
                                 >
                                     Logout
                                 </Link>
-
                             </>
                         ) : (
                             <>
@@ -109,12 +75,6 @@ function Profile() {
                                     onClick={() => setOpenMenu(false)}
                                 >
                                     Register
-                                </Link>
-                                <Link
-                                    href="/settings"
-                                    className="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer"
-                                >
-                                    Settings
                                 </Link>
                             </>
                         )}
