@@ -61,7 +61,7 @@ function SettingsPage() {
                     <div className=' text-2xl'>Personal Informations</div>
                     <div className='space-y-5'>
                         <div className="flex flex-col space-y-2">
-                            <label className="text-sm font-medium text-gray-700">
+                            <label className="text-sm dark:text-white font-medium text-gray-700">
                                 Full Name
                             </label>
                             <input
@@ -72,7 +72,7 @@ function SettingsPage() {
                             />
                         </div>
                         <div className="flex flex-col space-y-2">
-                            <label className="text-sm font-medium text-gray-700">
+                            <label className="text-sm dark:text-white font-medium text-gray-700">
                                 Username
                             </label>
                             <input
@@ -84,7 +84,7 @@ function SettingsPage() {
                         </div>
                         <div className='flex justify-between'>
                             <div className="flex flex-col space-y-2">
-                                <label className="text-sm font-medium text-gray-700">
+                                <label className="text-sm dark:text-white font-medium text-gray-700">
                                     Email
                                 </label>
                                 <input
@@ -95,7 +95,7 @@ function SettingsPage() {
                                 />
                             </div>
                             <div className="flex flex-col space-y-2">
-                                <label className="text-sm font-medium text-gray-700">Password</label>
+                                <label className="text-sm font-medium dark:text-white text-gray-700">Password</label>
                                 <div className="relative">
                                     <input
                                         className="w-full border border-gray-300 py-2 pr-10 px-3 text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-200 transition-all"
@@ -119,7 +119,7 @@ function SettingsPage() {
                         </div>
 
                         <div className="flex flex-col space-y-2" >
-                            <label className="text-sm font-medium text-gray-700">Gender</label>
+                            <label className="text-sm font-medium dark:text-white text-gray-700">Gender</label>
                             <div className="flex justify-between items-center">
                                 <div className="flex items-center me-4">
                                     <input
@@ -129,7 +129,7 @@ function SettingsPage() {
                                         className="w-4 h-4 accent-purple-600   focus:ring-purple-500 "
 
                                     />
-                                    <label htmlFor="purple-checkbox" className="ms-2 text-sm font-medium text-gray-900">Female</label>
+                                    <label htmlFor="purple-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-white">Female</label>
                                 </div>
                                 <div className="flex items-center me-4">
                                     <input
@@ -138,7 +138,7 @@ function SettingsPage() {
                                         value="male"
                                         className="w-4 h-4 accent-blue-600   focus:ring-blue-500 "
                                     />
-                                    <label htmlFor="blue-checkbox" className="ms-2 text-sm font-medium text-gray-900">Male</label>
+                                    <label htmlFor="blue-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-white">Male</label>
                                 </div>
                                 <div className="flex items-center me-4">
                                     <input
@@ -147,15 +147,15 @@ function SettingsPage() {
                                         value="specify "
                                         className="w-4 h-4 accent-gray-800   focus:ring-gray-500 "
                                     />
-                                    <label htmlFor="gray-checkbox" className="ms-2 text-sm font-medium text-gray-900">Don't specify</label>
+                                    <label htmlFor="gray-checkbox" className="ms-2 text-sm font-medium text-gray-900 dark:text-white">Don't specify</label>
                                 </div>
                             </div>
                         </div>
 
                         <div className="flex flex-col space-y-2">
-                            <label className="text-sm font-medium text-gray-700">Phone Number</label>
+                            <label className="text-sm font-medium text-gray-700 dark:text-white">Phone Number</label>
                             <div className="flex items-center space-x-2">
-                                <select className="border border-gray-300 py-2 px-3 text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-200 transition-all">
+                                <select className="border border-gray-300 py-2 px-3 dark:text-gray-800 text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-200 transition-all">
                                     {countries.map((country) => (
                                         <option key={country.code} value={country.code}>
                                             {country.flag} {country.code}
@@ -172,13 +172,13 @@ function SettingsPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="block text-sm font-medium text-gray-700">Birth Date</label>
+                            <label className="block text-sm font-medium text-gray-700 dark:text-white">Birth Date</label>
                             <div className="flex gap-10">
                                 <select
-                                    className="border border-gray-300 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    className="border border-gray-300 rounded-md py-2 dark:text-gray-800 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     defaultValue=""
                                 >
-                                    <option value="" disabled>Day</option>
+                                    <option value="" disabled >Day</option>
                                     {Array.from({ length: 31 }, (_, i) => (
                                         <option key={i + 1} value={i + 1}>
                                             {i + 1}
@@ -187,7 +187,7 @@ function SettingsPage() {
                                 </select>
 
                                 <select
-                                    className="border border-gray-300 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    className="border border-gray-300 dark:text-gray-800 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     defaultValue=""
                                 >
                                     <option value="" disabled>Month</option>
@@ -202,7 +202,7 @@ function SettingsPage() {
                                 </select>
 
                                 <select
-                                    className="border border-gray-300 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                    className="border border-gray-300 dark:text-gray-800 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                                     defaultValue=""
                                 >
                                     <option value="" disabled>Year</option>
@@ -221,7 +221,7 @@ function SettingsPage() {
                 <div className="p-4 w-1/2  space-y-5">
                     <div className="text-2xl">User Informations </div>
                     <div className='space-y-2'>
-                        <label className="text-sm font-medium text-gray-700 ">Social Medias</label>
+                        <label className="text-sm font-medium text-gray-700 dark:text-white ">Social Medias</label>
                         <div className="space-y-4">
                             <div className="relative flex items-center mb-4">
                                 <FaTwitter

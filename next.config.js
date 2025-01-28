@@ -1,7 +1,8 @@
 module.exports = {
   images: {
     domains: ['direktor.com.tr',
-      'via.placeholder.com'
+      'via.placeholder.com',
+      'loremflickr.com'
     ],
   },
 }

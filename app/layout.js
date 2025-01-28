@@ -50,7 +50,6 @@ export default function RootLayout({ children }) {
                     <Footer className="w-full" />
                 </div>
 
-                {/* ToastContainer'ı ekleyin */}
                 <ToastContainer position="top-right" autoClose={5000} hideProgressBar={true} closeOnClick />
             </body>
         </html>
