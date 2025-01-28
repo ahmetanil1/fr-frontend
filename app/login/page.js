@@ -19,18 +19,28 @@ function LoginContainer() {
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
-        const userData = Object.fromEntries(formData.entries());
+        const userData = {
+            email,
+            password
+        };
+
         try {
-            await loginUser(userData);
-            toast.success("Login success");
+            if (!userData.email || !userData.password) {
+                toast.error("Please fill in all fields.");
+            }
+            else if (userData.email !== email || userData.password !== password) {
+                toast.error("Please check your credentials.");
+            }
+            else {
+                await loginUser(userData);
+                toast.success("Login success");
+                router.push("/");
+            }
         }
         catch (error) {
             console.error("Login failed:", error.message);
             toast.error("Login failed. Please check your credentials.");
         }
-
-
     };
 
     return (

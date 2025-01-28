@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import dotenv from "dotenv";
 import Button from '@/components/general/Button';
+import { createUser } from '@/services/users';
 
 function RegisterContainer() {
     const [username, setUsername] = useState("");
@@ -17,14 +18,10 @@ function RegisterContainer() {
 
 
     const router = useRouter();
-    const backend_url = process.env.BACKEND_URL;
+    const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
     const validateForm = () => {
 
 
-        if (password !== confirmPassword) {
-            toast.error("Passwords do not match.");
-            return false;
-        }
 
         const passwordPattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
         if (!passwordPattern.test(password)) {
@@ -49,34 +46,37 @@ function RegisterContainer() {
 
     const handleSubmitRegister = (e) => {
         e.preventDefault();
-        if (!validateForm()) {
-            return;
+        if (!validateForm) {
+            return false;
         }
-        fetch(`${backend_url}/auth/signup`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                username,
-                name,
-                surname,
-                email,
-                password
-            })
-        }).then(async (response) => {
-            const data = await response.json();
-            console.log(data);
-            if (response.ok) {
-                toast.success("Registration successful. Redirecting...");
+        const userData = {
+            username,
+            name,
+            surname,
+            email,
+            password,
+        };
+
+        const registerUser = async () => {
+            try {
+                if (!userData.username || !userData.name || !userData.surname || !userData.email || !userData.password) {
+                    toast.error("Please fill in all fields.");
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    toast.error("Passwords do not match.");
+                    return false;
+                }
+
+                await createUser(userData);
+                toast.success("Registration successful.");
                 router.push("/login");
-            } else {
-                toast.error(data.message.tr);
+            } catch (error) {
+                console.error("Registration failed:", error.message);
+                toast.error("Registration failed. Please try again.");
             }
-        }).catch((error) => {
-            console.error(error.message.tr);
-            toast.error("An error occurred. Please try again.");
-        });
+        }
+        registerUser();
     };
 
     return (
