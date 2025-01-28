@@ -5,7 +5,6 @@ import { IoReturnDownBackSharp } from "react-icons/io5";
 import Input from "../general/Input";
 import HamburgerMenuContent from "../hamburgerMenuContent";
 import { useRouter } from "next/navigation";
-import { getCategories } from '@/services/categories';
 
 function HamburgerMenu() {
     const [openMenu, setOpenMenu] = useState(false);
@@ -47,17 +46,6 @@ function HamburgerMenu() {
         setOpenMenu(false); // Menü kapansın
     };
 
-    const [categories, setCategories] = useState([]);
-    useEffect(() => {
-        const fetchCategories = async () => {
-            const data = await getCategories();
-            if (data) {
-                setCategories(data);
-            }
-        }
-        fetchCategories();
-    }, []);
-
 
 
     return (
@@ -98,7 +86,6 @@ function HamburgerMenu() {
 
                     <div className="flex flex-col py-8 space-y-4 text-center max-h-[80vh]">
                         <HamburgerMenuContent
-                            categories={categories}
                             onCategoryClick={handleCategoryClick}
                         />
                     </div>

@@ -3,7 +3,7 @@ import React from 'react'
 
 async function CategoryPage() {
 
-    return <CategoryContainer categories={categories} />
+    return <CategoryContainer  />
 
 }
 
