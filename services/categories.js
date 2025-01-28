@@ -1,9 +1,8 @@
-import dotenv from "dotenv";
 
-const backend_url = process.env.BACKEND_URL;
+const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 
 export async function getCategories() {
-    console.log(backend_url + "/categories");
 
     try {
         const response = await fetch(`${backend_url}/categories`, {
