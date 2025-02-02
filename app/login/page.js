@@ -20,8 +20,8 @@ function LoginContainer() {
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
         const userData = {
-            email,
-            password
+            email: e.target.email.value,
+            password: e.target.password.value
         };
 
         try {
@@ -32,9 +32,11 @@ function LoginContainer() {
                 toast.error("Please check your credentials.");
             }
             else {
-                await loginUser(userData);
-                toast.success("Login success");
-                router.push("/");
+                const response = await loginUser(userData);
+                if (response) {
+                    toast.success("Login successful.");
+                    router.push("/");
+                }
             }
         }
         catch (error) {

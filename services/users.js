@@ -1,4 +1,3 @@
-import { toast } from 'react-toastify';
 
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -132,7 +131,7 @@ export async function getCurrentUser() {
             console.log("Current User:", data);
             return data;
         } else {
-            throw new Error(response.statusText || "Failed to fetch current user");
+            console.log("kullanıcı oturum açmamış");
         }
 
     } catch (error) {
@@ -174,7 +173,8 @@ export const loginUser = async (userData) => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(userData),
+            credentials: "include"
         });
 
         if (!response.ok) {
@@ -187,7 +187,6 @@ export const loginUser = async (userData) => {
         return { error: error.message };
     }
 };
-
 export const logoutUser = async () => {
     try {
         const response = await fetch(`${backend_url}/auth/logout`, {
@@ -195,22 +194,23 @@ export const logoutUser = async () => {
             headers: {
                 "Content-Type": "application/json"
             },
-            credentials: "include",
+            credentials: "include"
         });
 
+        // Yanıtı kontrol et
         if (response.ok) {
-            const data = await response.json();
-            console.log("Logout data:", data);
-            return data;
-        }
-        else {
-            throw new Error(response.statusText || "Unknown error");
+            console.log("Response:", response);
+            return true;
+        } else {
+            // Yanıt içeriğini al
+            const errorText = await response.text();    
+            console.log("Logout failed", errorText);
+            return { error: errorText };  // Hata mesajını döndür
         }
     } catch (error) {
         return { error: error.message };
     }
 }
-
 
 export const createUser = async (userData) => {
     try {

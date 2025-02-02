@@ -1,22 +1,18 @@
 import React, { useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import Link from "next/link";
-import { logoutUser } from "@/services/users";
 import { toast } from "react-toastify";
 
 function Profile({ user, onLogout }) {
     const [openMenu, setOpenMenu] = useState(false);
-
     const handleLogout = async () => {
-        try {
-            await logoutUser();
-            setOpenMenu(false);
-            onLogout();
-            toast.success("Logout success");
-        } catch (error) {
-            console.error("Logout failed:", error);
+        const result = await onLogout();
+        if (result) {
+            toast.success("Logout successful.");
+        } else {
+            toast.error("Logout failed.");
         }
-    };
+    }
 
     return (
         <div className="relative inline-block text-left">
@@ -43,10 +39,10 @@ function Profile({ user, onLogout }) {
                         {user ? (
                             <>
                                 <Link
-                                    href="/recipe/create-recipe"
+                                    href="/user"
                                     className="px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer"
                                 >
-                                    Add Recipe
+                                    Recipes
                                 </Link>
                                 <Link
                                     href="/settings"
