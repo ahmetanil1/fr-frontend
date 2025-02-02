@@ -1,12 +1,10 @@
-import RecipeDetail from '@/components/recipe-details'
 import React from 'react'
 
-function RecipeDetails() {
+function page() {
     return (
-        <div>
-            <RecipeDetail />
+        <div>Bir şeyler gelebilir
         </div>
     )
 }
 
-export default RecipeDetails
+export default page

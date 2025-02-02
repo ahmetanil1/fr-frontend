@@ -6,7 +6,7 @@ function FeaturedRecipe() {
         <div>
             <div className='flex flex-wrap justify-center gap-4 my-10'>
                 <div>
-                    apspda
+                    Kullanıcının recipeleri buraya gelecek
                 </div>
             </div>
         </div>
