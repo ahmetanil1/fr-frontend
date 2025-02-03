@@ -28,7 +28,7 @@ function RecipeDetail() {
     return (
         <div className='flex flex-col space-y-1 pt-4'>
             <div className="p-4 dark:border-gray-900 border rounded-lg shadow-lg relative flex justify-center items-center flex-col w-full h-[500px] ">
-                {/* Görsel */}
+           
                 <Image
                     alt="yemek resmi"
                     unoptimized
@@ -37,14 +37,14 @@ function RecipeDetail() {
                     objectFit="cover"
                     className="rounded-lg "
                 />
-                {/* Yemek İsmi */}
+            
                 <div className="absolute bottom-8  left-1/2 transform -translate-x-1/2 text-white text-4xl bg-black bg-opacity-50 px-8 py-2 rounded">
                     ASKDKAKSDKASKDAKSDKASK KDKAS KDKA KSDKA
                 </div>
             </div>
 
             <div className='flex justify-center gap-3  w-full'>
-                <div className='space-y-4  pt-4 w-/10 '>  {/*yemeği ilgilendiren kısımlar */}
+                <div className='space-y-4  pt-4 w-/10 '> 
                     <div className='flex justify-center gap-4'>
                         <div className=' flex flex-wrap'>
                             <div className=' dark:border-gray-900 border rounded-lg shadow-lg gap-4 flex flex-wrap p-2 text-sm w-full '>
@@ -81,7 +81,7 @@ function RecipeDetail() {
                     <div className="p-4 dark:border-gray-900 border rounded-lg shadow-lg">
                         <div className="text-lg font-semibold mb-2">Yemeğin Açıklaması</div>
                         <hr className="border-gray-300 mb-4" />
-                        {/* Transition için max-h ve overflow-hidden */}
+                 
                         <div
                             className={`transition-all duration-500 ease-in-out overflow-hidden ${readMore ? 'max-h-[500px] opacity-100' : 'max-h-[100px] opacity-50'
                                 }`}
@@ -189,14 +189,13 @@ function RecipeDetail() {
                         </div>
                     </div>
                     <div className="flex flex-col justify-center dark:border-gray-900 border rounded-lg shadow-lg  gap-4 p-4">
-                        {/* Başlık */}
+             
                         <div className='flex w-full items-start'>
                             <div className="text-lg font-bold ">
                                 Detaylı Yemek videomuz var!
                             </div>
                         </div>
 
-                        {/* Video Player */}
                         <div className="w-full max-w-2xl ">
                             <video
                                 controls

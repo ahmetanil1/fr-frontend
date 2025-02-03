@@ -81,7 +81,7 @@ function CreateRecipe() {
                         />
                     </div>
 
-                    {/* Photo Upload Section */}
+
                     <div className="relative w-full h-64 border border-black  hover:border-gray-600 border-gray-300 rounded-md flex flex-col items-center justify-center">
                         <label
                             htmlFor="photo-upload"
@@ -95,7 +95,7 @@ function CreateRecipe() {
                                         className="w-20 h-20 object-cover rounded-md"
                                     />
                                     <p className="text-gray-700 dark:text-gray-100 font-medium mt-2">
-                                        {formData.thumbnail} {/* Display the image file name */}
+                                        {formData.thumbnail}
                                     </p>
                                 </div>
                             ) : (
@@ -174,7 +174,7 @@ function CreateRecipe() {
                         </div>
                     </div>
 
-                    {/* Form Inputs Section */}
+
                     <div className="flex flex-col sm:flex-row gap-4 border border-gray-400   py-10 sm:py-5 md:py-10 rounded-md">
                         {/* Portion */}
                         <div className="flex flex-col items-center gap-2 w-full sm:w-1/3">
@@ -200,7 +200,7 @@ function CreateRecipe() {
                             </div>
                         </div>
 
-                        {/* Preparation Time */}
+
                         <div className="flex flex-col items-center gap-2 w-full sm:w-1/3">
                             <h3>Preparation Time</h3>
                             <div className="flex flex-col sm:flex-row justify-start md:space-y-0 space-y-3 space-x-0 sm:space-x-4">
@@ -223,7 +223,7 @@ function CreateRecipe() {
                             </div>
                         </div>
 
-                        {/* Cooking Time */}
+
                         <div className="flex flex-col items-center gap-2 w-full sm:w-1/3">
                             <h3>Cooking Time</h3>
                             <div className="flex flex-col sm:flex-row justify-start md:space-y-0 space-y-3 space-x-0 sm:space-x-4">
@@ -287,7 +287,6 @@ function CreateRecipe() {
                     </div>
 
 
-                    {/* Ingredients Section */}
                     <div>
                         <div className='text-lg pb-3'>Ingredients</div>
                         <div className='border border-gray-400 rounded-md p-1'>
@@ -342,7 +341,7 @@ function CreateRecipe() {
                         </button>
                     </div>
 
-                    {/* Cooking Tips Section */}
+
                     <div className="py-3">
                         <h3 className='text-lg'>How to do?</h3>
                         {formData.cookingTips.map((tip, index) => (
@@ -413,7 +412,7 @@ function CreateRecipe() {
                         </button>
                     </div>
 
-                    {/* Video URL Section */}
+
                     <div>
                         <h3 className="py-4 text-lg">Video URL</h3>
                         <Input
@@ -425,7 +424,7 @@ function CreateRecipe() {
                     </div>
 
                     <div className="flex flex-col gap-4">
-                        {/* Gallery Title */}
+
                         <h3 className="text-lg font-bold flex justify-start text-center">Gallery</h3>
                         {formData.gallery.length > 0 && (
                             <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -481,7 +480,7 @@ function CreateRecipe() {
                             </div>
                         )}
 
-                        {/* Add Photo Button */}
+
                         <div className="text-center flex justify-start">
                             <button
                                 type="button"
@@ -494,7 +493,6 @@ function CreateRecipe() {
                         </div>
                     </div>
 
-                    {/* Submit Button */}
                     <div className="flex justify-center gap-4">
                         <Button
                             type="button"
