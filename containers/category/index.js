@@ -9,9 +9,9 @@ function CategoryContainer() {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const data = await getCategories();
-            if (data) {
-                setCategories(data);
+            const response = await getCategories();
+            if (response) {
+                setCategories(response);
             }
         }
         fetchCategories();
@@ -22,7 +22,7 @@ function CategoryContainer() {
                 <div className='flex flex-row'>
                     {categories.map((category, index) => (
                         <div key={index} className='flex flex-grow'>
-                            <FeaturedCategory category={category} />
+                            <FeaturedCategory category={category.data} />
                         </div>
                     ))}
                 </div>
