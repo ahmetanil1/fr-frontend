@@ -12,7 +12,6 @@ export async function GetSingleUser(user_id) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("User:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -35,7 +34,6 @@ export async function getSingleUserFollowers(user_id) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("User Followers:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -58,7 +56,6 @@ export async function getSingleUserFollowing(user_id) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("User Following:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -81,7 +78,6 @@ export async function followUser(user_id) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("User Following:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -104,7 +100,6 @@ export async function unfollowUser(user_id) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("User unfollowing:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -128,7 +123,6 @@ export async function getCurrentUser() {
 
         if (response.ok) {
             const data = await response.json();
-            console.log("Current User:", data);
             return data;
         } else {
             console.log("kullanıcı oturum açmamış");
@@ -141,20 +135,18 @@ export async function getCurrentUser() {
 }
 
 
-export async function upgradeCurrentUser(token) {
+export async function upgradeCurrentUser(updatedData) {
     try {
         const response = await fetch(`${backend_url}/users/me`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-
             },
-            credentials: "include"
+            credentials: "include",
+            body: JSON.stringify(updatedData)
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Upgraded user data:", data);
             return data;
         }
         else {
@@ -181,7 +173,6 @@ export const loginUser = async (userData) => {
             throw new Error("Login failed");
         }
         const data = await response.json();
-        console.log("Login data:", data);
         return data;
     } catch (error) {
         return { error: error.message };
@@ -199,11 +190,10 @@ export const logoutUser = async () => {
 
         // Yanıtı kontrol et
         if (response.ok) {
-            console.log("Response:", response);
             return true;
         } else {
             // Yanıt içeriğini al
-            const errorText = await response.text();    
+            const errorText = await response.text();
             console.log("Logout failed", errorText);
             return { error: errorText };  // Hata mesajını döndür
         }
@@ -224,7 +214,6 @@ export const createUser = async (userData) => {
 
         if (response.ok) {
             const data = await response.json();
-            console.log("User data:", data);
             return data;
         }
         else {

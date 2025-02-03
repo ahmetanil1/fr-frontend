@@ -10,11 +10,9 @@ export async function getCategories() {
             headers: {
                 "Content-Type": "application/json"
             },
-            credentials: "include"
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Categories:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -37,7 +35,6 @@ export async function createCategories() {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("New Category:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -60,7 +57,6 @@ export async function getSingleCategory(cat_id) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Single Category:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -84,7 +80,6 @@ export async function updateCategory(cat_id) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Updated Category:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -107,7 +102,6 @@ export async function deleteCategory(cat_id) {
 
         if (response.ok) {
             const data = await response.json();
-            console.log("Deleted Category:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -128,7 +122,6 @@ export async function getSubCategories(subCat_id) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Sub Categories:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -152,7 +145,6 @@ export async function getSlugCategories(slug) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Categories with slug:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -174,7 +166,6 @@ export async function getSlugSubCategories(slug) {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Sub Categories with slug:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");

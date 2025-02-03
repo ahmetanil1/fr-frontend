@@ -9,7 +9,6 @@ export const fetchAllRecipes = async () => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -27,7 +26,6 @@ export const fetchRecipeById = async (recipe_id) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -49,7 +47,6 @@ export const createNewRecipe = async (recipeData) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -71,7 +68,6 @@ export const updateRecipeById = async (recipe_id, recipeData) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -89,7 +85,6 @@ export const deleteRecipeById = async (recipe_id) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -107,7 +102,6 @@ export const fetchRecipeByUserAndSlug = async (user_id, recipe_slug) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -129,7 +123,6 @@ export const addComponentToRecipe = async (recipe_id, componentData) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -151,7 +144,6 @@ export const updateRecipeComponent = async (recipe_id, component_id, componentDa
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -169,7 +161,6 @@ export const deleteRecipeComponent = async (recipe_id, component_id) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -191,7 +182,6 @@ export const addInformationToRecipe = async (recipe_id, informationData) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -213,7 +203,6 @@ export const updateRecipeInformation = async (recipe_id, information_id, informa
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -231,7 +220,6 @@ export const deleteRecipeInformation = async (recipe_id, information_id) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -253,7 +241,6 @@ export const addInstructionsToRecipe = async (recipe_id, instructionsData) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -275,7 +262,6 @@ export const updateRecipeInstructions = async (recipe_id, instructionsData) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -293,7 +279,6 @@ export const deleteRecipeInstructions = async (recipe_id) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -315,7 +300,6 @@ export const addCommentToRecipe = async (recipe_id, commentData) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -337,7 +321,6 @@ export const updateRecipeComment = async (recipe_id, comment_id, commentData) =>
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -355,7 +338,6 @@ export const deleteRecipeComment = async (recipe_id, comment_id) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -377,7 +359,6 @@ export const addReplyToComment = async (recipe_id, comment_id, replyData) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -399,7 +380,6 @@ export const updateCommentReply = async (recipe_id, comment_id, reply_id, replyD
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -417,7 +397,6 @@ export const deleteCommentReply = async (recipe_id, comment_id, reply_id) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -439,7 +418,6 @@ export const rateRecipe = async (recipe_id, ratingData) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -457,7 +435,6 @@ export const fetchUserRecipeRating = async (recipe_id) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -475,7 +452,6 @@ export const fetchUserRecipeBookmark = async (recipe_id) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
@@ -493,7 +469,6 @@ export const addRecipeBookmark = async (recipe_id) => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log("Data:", data);
             return data;
         } else {
             throw new Error(response.statusText || "Unknown error");
